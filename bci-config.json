@@ -67,15 +67,9 @@
         }
     },
     "gui-input-settings": {
-<<<<<<< HEAD
         "subject-id": "S1",
         "total-runs": 4,
-        "n-per-task": 12,
-=======
-        "subject-id": 1,
-        "total-runs": 2,
-        "n-per-task": 5.0,
->>>>>>> parent of 6a33a90 (GUI improvements)
+        "n-per-task": 40,
         "n-run": 1,
         "n-session": 1,
         "motor-mode": "ME",

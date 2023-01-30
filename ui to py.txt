@@ -1,4 +1,0 @@
-cmd
-
-pyuic6 UserInterface.ui -o UserInterface.py
-pyuic6 Optimized.ui -o Optimized.py

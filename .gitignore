@@ -1,2 +1,2 @@
 # ignore measured data
-FeedbackModel/data/measurements/*
+SubjectData/*

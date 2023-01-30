@@ -1,10 +1,15 @@
 # README
 
+## Repository is based on https://github.com/DianaNord/VirtualBrainEEGFeedback.git
+
 ## Content of the repository
+```START_GUI.bat```:
+This patch file opens the GUI which controls the configuration file, the feedback model and the VR game.
+
 ```FeedbackModel```:
 This folder contains the Python scripts for the feedback model.
 
-```VRFeedback```:
+```Unity Game```:
 This folder contains the unity project.
 
 ```bci-config.json```:
@@ -15,8 +20,10 @@ Contains all necessary settings for the feedback model and the VR environment:
 
 ## Workflow
 
+
 ### EEG
-For testing purposes an eeg signal can be simulated by executing the script ``FeedbackModel/eeg_simulation.py``. Settings for the simulated signal (sample rate, channels etc.) can be changed in ``FeedbackModel/signalserver/configs/eegsim.xml``.
+For testing purposes an eeg signal can be simulated by executing the script ``FeedbackModel/eeg_simulation.py``.
+Settings for the simulated signal (sample rate, channels etc.) can be changed in ``FeedbackModel/signalserver/configs/eegsim.xml``.
 
 ### Feedback Model
 The dependencies for the feedback model can be installed with ``pip install requirements.txt``. 
@@ -33,7 +40,7 @@ For computing these *.mat files the following steps are necessary:
 - Run ``FeedbackModel/compute_csp_lda.py``. It takes ``messung.mat`` as input and computes the CSP and LDA coefficients.
 
 ### VR Environment
-Open the project ``VRFeedback`` in Unity. Make sure the VR headset (HTC Vive) is connected and that you are logged into SteamVR.
+Open the project ``UnityGame`` in Unity. Make sure the VR headset (HTC Vive) is connected and that you are logged into SteamVR.
 
 In case the scene ``NeuronSphere`` is not visible it must be opened: ``File->Open Scene`` (the path of the scene is ``VRFeedback/Assets/Scenes/NeuronSphere.unity``).
 In the Inspector tab of the ``ScenarioController`` there are 2 important variables which must be set before the "game" is started:
@@ -42,5 +49,10 @@ In the Inspector tab of the ``ScenarioController`` there are 2 important variabl
 
 After starting the game (click on the play button) the VR environment can be seen in the VR headset and in the Game view. 
 
-Now it is important to check that all LSL streams are available in the Lab Recorder (the names should be the same as in ``bci-config.json``). If the participant is ready start recording all LSL streams via the Lab Recorder. Then the session can be started by checking ``Start Session`` in the Inspector tab of the ``ScenarioController`` in Unity.
+Now it is important to check that all LSL streams are available in the Lab Recorder (the names should be the same as in ``bci-config.json``).
+If the participant is ready start recording all LSL streams via the Lab Recorder.
+Then the session can be started by checking ``Start Session`` in the Inspector tab of the ``ScenarioController`` in Unity.
 
+### LabRecorder
+The LabRecorder is the default recording program that comes with LSL.
+It allows to record all streams on the lab network (or a subset) into a single file, with time synchronization between streams.

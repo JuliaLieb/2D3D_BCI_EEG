@@ -118,31 +118,27 @@ def save_to_mat(file_path, identifier, data):
     scipy.io.savemat(file_path, {identifier: data})
 
 
-if __name__ == "__main__":
+def xdf_to_mat(config):
 
     # ------------- Subject specific variables -------------
-    modality = 'ME'
-    subject_id = 'sub-P001'
-    session = '1'
-    run = '1'
+    motor_mode = config['gui-input-settings']['motor-mode']
+    dimension = config['gui-input-settings']['dimension-mode']
+    subject_id = config['gui-input-settings']['subject-id']
+    session = str(config['gui-input-settings']['n-session'])
+    run = str(config['gui-input-settings']['n-run'])
     # ------------------------------------------------------
 
     cwd = os.getcwd()
+    root_dir = cwd + '/SubjectData/'
 
-    root_dir = cwd + '/data/current/'
-    out_dir = root_dir + subject_id + '/' + modality
 
-    file_name = '/subj_' + session + '_block' + run + '.xdf'
-    xdf_file_path = root_dir + subject_id + file_name
-    mat_file_path = out_dir + '/messung.mat'
+    file_name = subject_id + '_ses' + session + '_run' + run + '_' + motor_mode + '_' + dimension
+    xdf_file_path = root_dir + subject_id + '/' + file_name + '.xdf'
+    mat_file_path = root_dir + subject_id + '/' + file_name + '.mat'
 
-    if not os.path.exists(out_dir):
-        os.makedirs(out_dir)
-
-    # Read BCI Configuration
-    config_file = cwd + '/../bci-config.json'
-    with open(config_file) as json_file:
-        config = json.load(json_file)
+    if not os.path.exists(xdf_file_path):
+        print(".xdf file for this configuration does not exist.")
+        os.makedirs(root_dir + subject_id + '/')
 
     # Extract the eeg and marker lsl stream from the xdf file
     stream_eeg, stream_marker = load_xdf(xdf_file_path, config['general-settings']['lsl-streams'])
@@ -151,3 +147,4 @@ if __name__ == "__main__":
     eeg_and_label = add_class_labels(stream_eeg, stream_marker)
 
     save_to_mat(mat_file_path, 'data', eeg_and_label)
+    print('.mat created')

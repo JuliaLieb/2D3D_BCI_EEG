@@ -7,17 +7,10 @@ import json
 import numpy as np
 import os
 import scipy.io
-<<<<<<< HEAD
 
 import bciutils
 
 if __name__ == "__main__":
-=======
-
-import bciutils
-
-def feedback_model():
->>>>>>> parent of 6a33a90 (GUI improvements)
 
     cwd = os.getcwd()
     config_file = cwd + '/bci-config.json'
@@ -30,8 +23,8 @@ def feedback_model():
     bci_model = bciutils.BCI(config)
 
     # Load CSP and LDA coefficients
-    csp_filter = scipy.io.loadmat(cwd + '/FeedbackModel/data/CSP_LDA/csp.mat')['csp_filter']
-    lda_coef = scipy.io.loadmat(cwd + '/FeedbackModel/data/CSP_LDA/lda.mat')['W']
+    csp_filter = scipy.io.loadmat(cwd + '/SubjectData/current/csp.mat')['csp_filter']
+    lda_coef = scipy.io.loadmat(cwd + '/SubjectData/current/lda.mat')['W']
 
     s_rate_half = bci_model.sample_rate / 2
 

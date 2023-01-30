@@ -8,6 +8,8 @@ import os
 import scipy.io
 from scipy import signal, linalg
 
+from FeedbackModel import xdf_to_mat
+
 
 class CSPAndLDA:
     """Provides methods the for calculation of common spatial pattern (CSP) and linear discriminant analysis (LDA)
@@ -262,23 +264,30 @@ class CSPAndLDA:
 
 
 if __name__ == "__main__":
-    # ------------- Subject specific variables -------------
-    modality = 'ME'
-    subject_id = 'sub-P001'
-    # ------------------------------------------------------
 
     cwd = os.getcwd()
-    root_dir = cwd + '/data/current/'
-    dir_in = root_dir + subject_id + '/' + modality + '/'
-    dir_out = dir_in + '../'
-    file_path = dir_in + 'messung.mat'
 
-    config_file_name = '/../bci-config.json'
-    config_file = cwd + config_file_name
-
-    # Load bci configuration
+    # Read BCI Configuration
+    config_file = cwd + '/bci-config.json'
     with open(config_file) as json_file:
         config = json.load(json_file)
+
+    # ------------- Subject specific variables -------------
+    motor_mode = config['gui-input-settings']['motor-mode']
+    dimension = config['gui-input-settings']['dimension-mode']
+    subject_id = config['gui-input-settings']['subject-id']
+    session = str(config['gui-input-settings']['n-session'])
+    run = str(config['gui-input-settings']['n-run'])
+    # ------------------------------------------------------
+
+    xdf_to_mat.xdf_to_mat(config)  # convert .xdf to .mat
+
+
+    file_name = subject_id  + '_ses' + session + '_run' + run+ '_' + motor_mode + '_' + dimension
+
+    root_dir = cwd + '/SubjectData/' + subject_id + '/'
+    dir_out = root_dir + '/../current/'
+    file_path = root_dir + file_name
 
     # Load eeg data
     data_mat = scipy.io.loadmat(file_path)['data'].T
@@ -289,7 +298,9 @@ if __name__ == "__main__":
     csp_lda_obj = CSPAndLDA(eeg=eeg_signal, labels=class_labels, bci_config=config)
 
     csp = csp_lda_obj.compute_csp()
-    scipy.io.savemat(dir_out + 'csp.mat', {'csp_filter': csp})
+    scipy.io.savemat(root_dir + 'CSP_' + file_name + '.mat', {'csp_filter': csp})
+    scipy.io.savemat(dir_out + 'csp' + '.mat', {'csp_filter': csp})
 
     lda_coeff = csp_lda_obj.compute_lda(csp)
-    scipy.io.savemat(dir_out + 'lda.mat', {'W': lda_coeff})
+    scipy.io.savemat(root_dir + 'LDA_' + file_name + '.mat', {'W': lda_coeff})
+    scipy.io.savemat(dir_out + 'lda' + '.mat', {'W': lda_coeff})
