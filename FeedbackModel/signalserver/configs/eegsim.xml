@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tobi-config version="1.0">
+
+<!-- =============================================================================== -->
+
+	<subject>
+		<id> 007 </id>
+		<first_name> James </first_name>
+		<surname> Bond </surname>
+        <sex> m </sex>
+		<birthday> 02.02.1953 </birthday>
+        <handedness> r </handedness>
+        <medication> none </medication>
+        <optional> glasses="yes" smoker="no" technician="David" </optional>
+	</subject>
+
+<!-- =============================================================================== -->
+
+	<server_settings>   
+		<ctl_port> 9000 </ctl_port>
+		<udp_bc_addr> 127.0.0.1 </udp_bc_addr>
+		<udp_port> 9001 </udp_port>
+		<tid_server tid_use="off" tid_port="9100" assume_zero_network_delay="on" />	
+ 		<store-data value="off">
+			<filepath> raw_eeg </filepath>
+			<filename> raw_eeg </filename>
+			<filetype> gdf </filetype>
+			<file_exists> new_file </file_exists>
+			<append_to_filename> _run_ </append_to_filename>
+			<continous_saving> no </continous_saving>
+		</store-data>        
+	</server_settings>
+
+<!-- =============================================================================== -->
+
+    <hardware name="eegsim" version="1.0" serial="">   
+        <mode> master </mode>        
+        <device_settings>            
+            <sampling_rate> 512 </sampling_rate>
+            <blocksize> 4 </blocksize>
+            <port> 9123 </port>               
+        </device_settings>
+        <channel_settings>
+            <selection>
+				<ch nr="01" name="Fp1" type="eeg" />
+                <ch nr="02" name="Fz" type="eeg" />
+                <ch nr="03" name="F3" type="eeg" />
+                <ch nr="04" name="F7" type="eeg" />
+                <ch nr="05" name="FT9"  type="eeg" />
+                <ch nr="06" name="FC5"   type="eeg" />
+                <ch nr="07" name="FC1"  type="eeg" />
+                <ch nr="08" name="C3"  type="eeg" />
+                <ch nr="09" name="T7"   type="eeg" />
+                <ch nr="10" name="TP9"  type="eeg" />
+                <ch nr="11" name="CP5"  type="eeg" />
+                <ch nr="12" name="CP1"   type="eeg" />
+                <ch nr="13" name="Pz"  type="eeg" />
+                <ch nr="14" name="P3" type="eeg" />
+                <ch nr="15" name="P7" type="eeg" />
+                <ch nr="16" name="O1" type="eeg" />
+				<ch nr="17" name="Oz" type="eeg" />
+				<ch nr="18" name="O2" type="eeg" />
+				<ch nr="19" name="P4" type="eeg" />
+				<ch nr="20" name="P8" type="eeg" />
+				<ch nr="21" name="TP10" type="eeg" />
+				<ch nr="22" name="CP6" type="eeg" />
+				<ch nr="23" name="CP2" type="eeg" />
+				<ch nr="24" name="Cz" type="eeg" />
+				<ch nr="25" name="C4" type="eeg" />
+				<ch nr="26" name="T8" type="eeg" />
+				<ch nr="27" name="FT10" type="eeg" />
+				<ch nr="28" name="FC6" type="eeg" />
+				<ch nr="29" name="FC2" type="eeg" />
+				<ch nr="30" name="F4" type="eeg" />
+				<ch nr="31" name="F8" type="eeg" />
+				<ch nr="32" name="Fp2" type="eeg" />
+            </selection>
+            <eeg_config>
+                <ch nr="01" scaling="1" offset="0" />
+                <ch nr="02" scaling="1" offset="0" />
+                <ch nr="03" scaling="1" offset="0" />
+                <ch nr="04" scaling="1" offset="0" />
+                <ch nr="05" scaling="1" offset="0" />
+                <ch nr="06" scaling="1" offset="0" />
+                <ch nr="07" scaling="1" offset="0" />
+                <ch nr="08" scaling="1" offset="0" />
+                <ch nr="09" scaling="1" offset="0" />
+                <ch nr="10" scaling="1" offset="0" />
+                <ch nr="11" scaling="1" offset="0" />
+                <ch nr="12" scaling="1" offset="0" />
+                <ch nr="13" scaling="1" offset="0" />
+                <ch nr="14" scaling="1" offset="0" />
+                <ch nr="15" scaling="1" offset="0" />
+				<ch nr="16" scaling="1" offset="0" />
+				<ch nr="17" scaling="1" offset="0" />
+                <ch nr="18" scaling="1" offset="0" />
+                <ch nr="19" scaling="1" offset="0" />
+                <ch nr="20" scaling="1" offset="0" />
+                <ch nr="21" scaling="1" offset="0" />
+                <ch nr="22" scaling="1" offset="0" />
+                <ch nr="23" scaling="1" offset="0" />
+                <ch nr="24" scaling="1" offset="0" />
+                <ch nr="25" scaling="1" offset="0" />
+                <ch nr="26" scaling="1" offset="0" />
+                <ch nr="27" scaling="1" offset="0" />
+                <ch nr="28" scaling="1" offset="0" />
+                <ch nr="29" scaling="1" offset="0" />
+                <ch nr="30" scaling="1" offset="0" />
+                <ch nr="31" scaling="1" offset="0" />
+				<ch nr="32" scaling="1" offset="0" />
+            </eeg_config>
+            <sine_config> <!--Sines are added to the signal; multiple entries per channel possible-->
+                <ch nr="08" frequ="12" amplitude="5" phase="0" />
+                <ch nr="24" frequ="12" amplitude="5" phase="0" />
+                <ch nr="25" frequ="12" amplitude="5" phase="0" />
+            </sine_config>
+        </channel_settings>            
+    </hardware>
+	
+<!-- =============================================================================== -->
+
+</tobi-config>

@@ -1,0 +1,30 @@
+l
+l
+<<<<<<< HEAD
+r
+l
+r
+l
+=======
+>>>>>>> parent of 6a33a90 (GUI improvements)
+r
+l
+r
+l
+r
+r
+r
+l
+r
+<<<<<<< HEAD
+=======
+l
+r
+l
+l
+l
+r
+r
+l
+r
+>>>>>>> parent of 6a33a90 (GUI improvements)
