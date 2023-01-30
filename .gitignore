@@ -1,2 +1,2 @@
-# ignore all matlab files
-*.mat
+# ignore measured data
+FeedbackModel/data/measurements/*
