@@ -13,8 +13,10 @@ using UnityEngine.SceneManagement;
 public class ScenarioController : MonoBehaviour
 {
     public static ScenarioController instance;
+	// const string PathConfig = "Assets/../../bci-config.json";
+	// const string Path = "Assets/Resources/run_";
 	const string PathConfig = "Assets/../../bci-config.json";
-	const string Path = "Assets/Resources/run_";
+	const string Path = "Assets/../../SubjectData/current/run_";
 
 	// public int numberRun = 1;
 	public bool showFeedback = false;
