@@ -17,7 +17,7 @@ def read_bci_config():
     return current_config
 
 
-def update_bci_config(subject_id, total_runs, tasks_per_run, n_run, n_session, motor_mode, fb_mode, erds_mode,
+def update_bci_config(subject_id, tasks_per_run, n_run, n_session, motor_mode, fb_mode, erds_mode,
                       dimension_mode):
     cwd = os.getcwd()
     config_file = cwd + '/bci-config.json'
@@ -29,7 +29,6 @@ def update_bci_config(subject_id, total_runs, tasks_per_run, n_run, n_session, m
     with open(config_file) as json_file:
         config = json.load(json_file)
         config['gui-input-settings']['subject-id'] = subject_id
-        config['gui-input-settings']['total-runs'] = total_runs
         config['gui-input-settings']['n-per-task'] = tasks_per_run
         config['gui-input-settings']['n-run'] = n_run
         config['gui-input-settings']['n-session'] = n_session

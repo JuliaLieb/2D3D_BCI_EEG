@@ -8,7 +8,7 @@ import os
 import scipy.io
 from scipy import signal, linalg
 
-from FeedbackModel import xdf_to_mat
+import xdf_to_mat
 
 
 class CSPAndLDA:

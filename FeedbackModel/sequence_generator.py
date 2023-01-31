@@ -31,9 +31,8 @@ def create_sequence(trials, my_tasks):
     return my_sequence
 
 
-def sequence_generator(subject_id, total_runs, tasks_per_run, n_run, n_session, motor_mode, dimension_mode):
+def sequence_generator(subject_id, tasks_per_run, n_run, n_session, motor_mode, dimension_mode):
     tasks = ["r", "l"]  # left and right hand
-    n_trials = int(tasks_per_run/2)
 
     # current subject
     directory = "SubjectData\\current\\"
@@ -54,7 +53,7 @@ def sequence_generator(subject_id, total_runs, tasks_per_run, n_run, n_session, 
     if (n_run == 1):
         t = 10  # for classification run: always 10 runs per condition (20 in total)
     else:
-        t = tasks
+        t = int(tasks_per_run/2)
     sequence = create_sequence(t, tasks)
 
     for trial in sequence:
