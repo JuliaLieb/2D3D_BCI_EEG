@@ -13,13 +13,16 @@ from FeedbackModel import sequence_generator, bci_config
 
 
 class UiUserInterface(object):
+    def __init__(self):
+        self.func_fb = None
+
     """ -----------------------
     Button Events (Click)
     ------------------------"""
 
     def update_button_click(self):
 
-        print("Check input settings...")
+        print("Click input settings.")
         subject_id = 'S' + str(self.input_id.value())
         # total_runs = self.input_total_runs.value()
         tasks_per_run = self.input_tasks.value()
@@ -46,67 +49,66 @@ class UiUserInterface(object):
 
         bci_config.update_bci_config(subject_id, tasks_per_run, n_run, n_session, motor_mode, fb_mode,
                                      erds_mode, dimension_mode)
-        print("... bci-config.json is updated with input settings.")
 
         tasks_per_run = int(self.input_tasks.value())
         sequence_generator.sequence_generator(subject_id, tasks_per_run, n_run, n_session, motor_mode, dimension_mode)
-        print("Sequence was generated.")
 
     def eeg_sim_button_click(self):
-        print("EEG simulation is started...")
+        print("Click EEG simulation.")
         cwd = os.getcwd()
         subprocess.Popen("python " + cwd + "/FeedbackModel/eeg_simulation.py")
-        print("eeg_simulation is open.")
 
 
     def stream_viewer_button_click(self):
-        print("Open stream viewer...")
+        print("Click Stream Viewer.")
         subprocess.Popen("lsl_viewer.exe")
-        print("Stream viewer is open.")
 
 
     def train_button_click(self):
-        print("Button for calculation of CSP & LDA clicked.")
+        print("Click train classifier.")
         cwd = os.getcwd()
         subprocess.Popen("python " + cwd + "/FeedbackModel/compute_csp_lda.py")
 
     def open_button_click(self):
-        print("Button for opening Unity clicked.")
+        print("Click Unity game")
         cwd = os.getcwd()
         subprocess.Popen(cwd + "\\UnityGame\\BCI-game\\BCI-game.exe", cwd = cwd + "\\UnityGame")
-        print("Unity is open.")
 
     def lsl_recorder_button_click(self):
-        print("Button for opening LSL Recorder clicked.")
+        print("Click Lab Recorder")
         cwd = os.getcwd()
         lsl_rec_file = cwd + '/LabRecorder/LabRecorder.exe'
         subprocess.Popen(lsl_rec_file)
-        print("LSL Recorder is open.")
 
     def start_fb_button_click(self):
-        print("Start feedback model button clicked.")
+        print("Click Feedback Model.")
         cwd = os.getcwd()
         path = cwd + "/SubjectData/current/csp.mat"
         if not os.path.isfile(path):
             print("CSP and LDA not found!")
             return None
-        subprocess.Popen("python " + cwd + "./FeedbackModel/feedback_model.py")
+        self.func_fb = subprocess.Popen("python " + cwd + "./FeedbackModel/feedback_model.py")
 
+    def proc_kill(self):
+        self.func_fb.kill()
 
     def close_button_click(self):
-        print("Close button clicked.")
+        self.proc_kill()
         MainWindow.close()
 
     def calc_results_button_click(self):
         print("Results could be calculated here.")
 
+
+
     """ -----------------------
     User Interface Setup
     ------------------------"""
 
+
     def setup_ui(self, main_window, current_config):
         main_window.setObjectName("main_window")
-        main_window.resize(900, 600)
+        main_window.resize(900, 650)
 
         """Title"""
         self.l_title = QtWidgets.QLabel(main_window)
@@ -269,14 +271,55 @@ class UiUserInterface(object):
 
         """Separation line"""
         self.line = QtWidgets.QFrame(main_window)
-        self.line.setGeometry(QtCore.QRect(430, 100, 20, 621))
+        self.line.setGeometry(QtCore.QRect(430, 100, 20, 500))
         self.line.setFrameShape(QtWidgets.QFrame.Shape.VLine)
         self.line.setFrameShadow(QtWidgets.QFrame.Shadow.Sunken)
         self.line.setObjectName("line")
 
+        """--------------Label Tools--------------"""
+        self.l_tools = QtWidgets.QLabel(main_window)
+        self.l_tools.setGeometry(QtCore.QRect(605, 100, 81, 21))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        font.setBold(True)
+        font.setWeight(75)
+        self.l_tools.setFont(font)
+        self.l_tools.setObjectName("l_tools")
+
+        """Close button"""
+        self.button_close = QtWidgets.QPushButton(main_window)
+        self.button_close.setGeometry(QtCore.QRect(700, 600, 104, 32))
+        self.button_close.setObjectName("button_close")
+        self.button_close.clicked.connect(self.close_button_click)  # button event
+
+        """EEG simulation button"""
+        self.button_eeg_sim = QtWidgets.QPushButton(main_window)
+        self.button_eeg_sim.setGeometry(QtCore.QRect(550, 140, 160, 32))
+        self.button_eeg_sim.setObjectName("button_EEG_sim")
+        self.button_eeg_sim.clicked.connect(self.eeg_sim_button_click)  # button event
+
+        """Opem stream viewer button"""
+        self.button_stream_viewer = QtWidgets.QPushButton(main_window)
+        self.button_stream_viewer.setGeometry(QtCore.QRect(550, 190, 160, 32))
+        self.button_stream_viewer.setObjectName("button_LSL_check")
+        self.button_stream_viewer.clicked.connect(self.stream_viewer_button_click)  # button event
+
+        """Start LSL recorder button"""
+        self.button_lsl_recorder = QtWidgets.QPushButton(main_window)
+        self.button_lsl_recorder.setGeometry(QtCore.QRect(550, 240, 160, 32))
+        self.button_lsl_recorder.setObjectName("button_LSL_recorder")
+        self.button_lsl_recorder.clicked.connect(self.lsl_recorder_button_click)  # button event
+
+        """Separation line"""
+        self.line_h = QtWidgets.QFrame(main_window)
+        self.line_h.setGeometry(QtCore.QRect(450, 300, 340, 20))
+        self.line_h.setFrameShape(QtWidgets.QFrame.Shape.HLine)
+        self.line_h.setFrameShadow(QtWidgets.QFrame.Shadow.Sunken)
+        self.line_h.setObjectName("line_h")
+
         """--------------Label Actions--------------"""
         self.l_actions = QtWidgets.QLabel(main_window)
-        self.l_actions.setGeometry(QtCore.QRect(610, 90, 81, 21))
+        self.l_actions.setGeometry(QtCore.QRect(605, 330, 81, 21))
         font = QtGui.QFont()
         font.setPointSize(10)
         font.setBold(True)
@@ -284,51 +327,27 @@ class UiUserInterface(object):
         self.l_actions.setFont(font)
         self.l_actions.setObjectName("l_actions")
 
-        """Close button"""
-        self.button_close = QtWidgets.QPushButton(main_window)
-        self.button_close.setGeometry(QtCore.QRect(680, 530, 104, 32))
-        self.button_close.setObjectName("button_close")
-        self.button_close.clicked.connect(self.close_button_click)  # button event
-
-        """EEG simulation button"""
-        self.button_eeg_sim = QtWidgets.QPushButton(main_window)
-        self.button_eeg_sim.setGeometry(QtCore.QRect(570, 150, 160, 32))
-        self.button_eeg_sim.setObjectName("button_EEG_sim")
-        self.button_eeg_sim.clicked.connect(self.eeg_sim_button_click)  # button event
-
-        """Opem stream viewer button"""
-        self.button_stream_viewer = QtWidgets.QPushButton(main_window)
-        self.button_stream_viewer.setGeometry(QtCore.QRect(570, 200, 160, 32))
-        self.button_stream_viewer.setObjectName("button_LSL_check")
-        self.button_stream_viewer.clicked.connect(self.stream_viewer_button_click)  # button event
-
-        """Start LSL recorder button"""
-        self.button_lsl_recorder = QtWidgets.QPushButton(main_window)
-        self.button_lsl_recorder.setGeometry(QtCore.QRect(570, 250, 160, 32))
-        self.button_lsl_recorder.setObjectName("button_LSL_recorder")
-        self.button_lsl_recorder.clicked.connect(self.lsl_recorder_button_click)  # button event
-
         """Open BCI button"""
         self.button_open_bci = QtWidgets.QPushButton(main_window)
-        self.button_open_bci.setGeometry(QtCore.QRect(570, 350, 160, 32))
+        self.button_open_bci.setGeometry(QtCore.QRect(550, 380, 160, 32))
         self.button_open_bci.setObjectName("button_open_BCI")
         self.button_open_bci.clicked.connect(self.open_button_click)  # button event
 
         """Start feedback button"""
         self.button_start_fb = QtWidgets.QPushButton(main_window)
-        self.button_start_fb.setGeometry(QtCore.QRect(570, 300, 160, 32))
+        self.button_start_fb.setGeometry(QtCore.QRect(550, 430, 160, 32))
         self.button_start_fb.setObjectName("button_start_FB")
         self.button_start_fb.clicked.connect(self.start_fb_button_click)  # button event
 
         """Train classifier button"""
         self.button_train_classifier = QtWidgets.QPushButton(main_window)
-        self.button_train_classifier.setGeometry(QtCore.QRect(570, 400, 160, 32))
+        self.button_train_classifier.setGeometry(QtCore.QRect(550, 480, 160, 32))
         self.button_train_classifier.setObjectName("button_train_classifier")
         self.button_train_classifier.clicked.connect(self.train_button_click)  # button event
 
         """Calculate results button"""
         self.button_calc_results = QtWidgets.QPushButton(main_window)
-        self.button_calc_results.setGeometry(QtCore.QRect(570, 450, 160, 32))
+        self.button_calc_results.setGeometry(QtCore.QRect(550, 530, 160, 32))
         self.button_calc_results.setObjectName("button_train_classifier")
         self.button_calc_results.clicked.connect(self.calc_results_button_click)  # button event
 
@@ -351,7 +370,8 @@ class UiUserInterface(object):
         # self.radio_erds_single.setText(_translate("main_window", "ERDS: single channel"))
         # self.radio_erds_average.setText(_translate("main_window", "ERDS: average channels"))
         self.l_input.setText(_translate("main_window", "Input"))
-        self.l_actions.setText(_translate("main_window", "Actions"))
+        self.l_actions.setText(_translate("main_window", "BCI"))
+        self.l_tools.setText(_translate("main_window", "Tools"))
         self.button_close.setText(_translate("main_window", "Close"))
         self.button_eeg_sim.setText(_translate("main_window", "EEG Simulation"))
         self.button_stream_viewer.setText(_translate("main_window", "Open Stream Viewer"))
@@ -363,6 +383,8 @@ class UiUserInterface(object):
         self.radio_2d.setText(_translate("main_window", "2D"))
         self.radio_3d.setText(_translate("main_window", "3D"))
         self.button_update_settings.setText(_translate("main_window", "Update Settings"))
+
+
 
 
 if __name__ == "__main__":
