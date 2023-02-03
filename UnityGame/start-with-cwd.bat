@@ -1,1 +1,1 @@
-"Game VR\VR-neurofeedback.exe"
+start BCI-game/BCI-Game.exe

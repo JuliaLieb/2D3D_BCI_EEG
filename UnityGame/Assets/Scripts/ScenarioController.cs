@@ -13,14 +13,11 @@ using UnityEngine.SceneManagement;
 public class ScenarioController : MonoBehaviour
 {
     public static ScenarioController instance;
-	// const string PathConfig = "Assets/../../bci-config.json";
-	// const string Path = "Assets/Resources/run_";
 	const string PathConfig = "Assets/../../bci-config.json";
 	const string Path = "Assets/../../SubjectData/current/run_";
 
-	// public int numberRun = 1;
 	public bool showFeedback = false;
-	private bool startSession = true; // false;
+	private bool startSession = false;
 
 	public enum AllConditions
 	{
@@ -122,12 +119,22 @@ public class ScenarioController : MonoBehaviour
 			Debug.LogError(ex);
         }
 	}
-	
+
 	/// <summary>
-    /// Waits until the session is started by the user.
-    /// Is called on the frame when a script is enabled just before any of the Update methods are called the first time.
-    /// </summary>
-    IEnumerator Start()
+	/// Waits until the session is started by the user.
+	/// Is called on the frame when a script is enabled just before any of the Update methods are called the first time.
+	/// </summary>
+	/// 
+	void Update()
+	{
+		if (Input.GetKeyDown(KeyCode.Space))
+		{
+			StartBlock();
+			Debug.Log("Start BCI.");
+		}
+	}
+
+	IEnumerator Start()
     {
 		Debug.Log("INFO: Wait until session is started by user...");
 
