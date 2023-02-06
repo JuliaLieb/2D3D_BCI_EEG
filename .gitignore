@@ -1,3 +1,3 @@
 # ignore measured data
 SubjectData/S*
-VR_BCI/*
+VR_Game/Library*

@@ -43,14 +43,13 @@ def sequence_generator(subject_id, tasks_per_run, n_run, n_session, motor_mode, 
     file_backup = open(directory_backup + "SEQ_" + subject_id + '_ses' + str(n_session) + '_run' + str(
         n_run) + '_' + motor_mode + '_' + dimension_mode + ".txt", "w")
 
-
     # Check existence of paths and files
     if not os.path.exists(directory):
         os.makedirs(directory)
     if not os.path.exists(directory_backup):
         os.makedirs(directory_backup)
 
-    if (n_run == 1):
+    if n_run == 1:
         t = 10  # for classification run: always 10 runs per condition (20 in total)
     else:
         t = int(tasks_per_run/2)

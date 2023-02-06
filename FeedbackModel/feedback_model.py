@@ -52,5 +52,5 @@ if __name__ == "__main__":
                                           bandpass_erds=bandpass_erds,
                                           csp=csp_filter, lda=lda_coef, log_band_power=log_band_power_unit)
 
-    # Start the feedback loop. It will run unitl the script is stopped by the user
+    # Start the feedback loop. It will run until the script is stopped by the user
     bci_model.start_feedback_loop()

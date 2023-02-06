@@ -24,7 +24,6 @@ class UiUserInterface(object):
 
         print("Click input settings.")
         subject_id = 'S' + str(self.input_id.value())
-        # total_runs = self.input_total_runs.value()
         tasks_per_run = self.input_tasks.value()
         n_run = self.input_run.value()
         n_session = self.input_session.value()
@@ -32,16 +31,12 @@ class UiUserInterface(object):
             motor_mode = "MI"
         else:
             motor_mode = "ME"
-        #if self.radio_fb_on.isChecked():
-        if n_run == 1: #calibration run
+        if n_run == 1:  # first run is always used to train classifier
             fb_mode = "off"
         else:
             fb_mode = "on"
-        """if self.radio_erds_average.isChecked():
-            erds_mode = "average"
-        else:
-            erds_mode = "single" """
-        erds_mode = "average"
+
+        erds_mode = "average"  # can be changed in bci-config.json, but fix for this setup #TODO
         if self.radio_3d.isChecked():
             dimension_mode = "3D"
         else:
@@ -72,7 +67,7 @@ class UiUserInterface(object):
     def open_button_click(self):
         print("Click Unity game")
         cwd = os.getcwd()
-        subprocess.Popen(cwd + "\\UnityGame\\BCI-game\\BCI-game.exe", cwd = cwd + "\\UnityGame")
+        subprocess.Popen(cwd + "\\VR_Game\\BCI-game\\BCI-game.exe", cwd = cwd + "\\VR_Game")
 
     def lsl_recorder_button_click(self):
         print("Click Lab Recorder")
@@ -99,13 +94,9 @@ class UiUserInterface(object):
     def calc_results_button_click(self):
         print("Results could be calculated here.")
 
-
-
     """ -----------------------
     User Interface Setup
     ------------------------"""
-
-
     def setup_ui(self, main_window, current_config):
         main_window.setObjectName("main_window")
         main_window.resize(900, 650)
@@ -141,19 +132,6 @@ class UiUserInterface(object):
         self.label_id = QtWidgets.QLabel(main_window)
         self.label_id.setGeometry(QtCore.QRect(60, 160, 171, 18))
         self.label_id.setObjectName("label_ID")
-
-        """Total runs"""
-        """
-        current_total_runs = current_config['gui-input-settings']['total-runs']
-        self.label_total_runs = QtWidgets.QLabel(main_window)
-        self.label_total_runs.setGeometry(QtCore.QRect(60, 210, 261, 18))
-        self.label_total_runs.setObjectName("label_total_runs")
-        self.input_total_runs = QtWidgets.QSpinBox(main_window)
-        self.input_total_runs.setGeometry(QtCore.QRect(340, 210, 60, 24))
-        self.input_total_runs.setMinimum(2)
-        self.input_total_runs.setProperty("value", current_total_runs)
-        self.input_total_runs.setObjectName("input_total_runs")
-        """
 
         """Trials per task"""
         current_tasks = current_config['gui-input-settings']['n-per-task']
@@ -204,46 +182,6 @@ class UiUserInterface(object):
             self.radio_mi.setChecked(True)
         else:
             self.radio_me.setChecked(True)
-
-        """Radio Button: Feedback on or off"""
-        """
-        current_fb_mode = current_config['gui-input-settings']['fb-mode']
-        self.radio_fb_on = QtWidgets.QRadioButton(main_window)
-        self.radio_fb_on.setGeometry(QtCore.QRect(60, 490, 200, 22))
-        self.radio_fb_on.setObjectName("radio_FB_on")
-        self.group_fb = QtWidgets.QButtonGroup(main_window)
-        self.group_fb.setObjectName("group_FB")
-        self.group_fb.addButton(self.radio_fb_on)
-        self.radio_fb_off = QtWidgets.QRadioButton(main_window)
-        self.radio_fb_off.setGeometry(QtCore.QRect(60, 520, 200, 22))
-        self.radio_fb_off.setObjectName("radio_FB_off")
-        self.group_fb.addButton(self.radio_fb_off)
-        if current_fb_mode == "on":
-            self.radio_fb_on.setChecked(True)
-        else:
-            self.radio_fb_off.setChecked(True)
-        """
-
-
-        """Radio Button: ERDS single or average"""
-        """
-        current_erds_mode = current_config['feedback-model-settings']['erds']['mode']
-        self.radio_erds_single = QtWidgets.QRadioButton(main_window)
-        self.radio_erds_single.setGeometry(QtCore.QRect(60, 570, 200, 22))
-        self.radio_erds_single.setObjectName("radio_ERDS_single")
-        self.group_erds = QtWidgets.QButtonGroup(main_window)
-        self.group_erds.setObjectName("group_ERDS")
-        self.group_erds.addButton(self.radio_erds_single)
-        self.radio_erds_average = QtWidgets.QRadioButton(main_window)
-        self.radio_erds_average.setGeometry(QtCore.QRect(60, 600, 200, 22))
-        self.radio_erds_average.setChecked(True)
-        self.radio_erds_average.setObjectName("radio_ERDS_average")
-        self.group_erds.addButton(self.radio_erds_average)
-        if current_erds_mode == "average":
-            self.radio_erds_average.setChecked(True)
-        else:
-            self.radio_erds_single.setChecked(True)
-        """
 
         """Radio Button: 2D or 3D"""
         current_dimension_mode = current_config['gui-input-settings']['dimension-mode']
@@ -359,16 +297,11 @@ class UiUserInterface(object):
         main_window.setWindowTitle(_translate("main_window", "BCI User Interface"))
         self.l_title.setText(_translate("main_window", "2D & 3D Visualization of EEG-Based BCI"))
         self.label_id.setText(_translate("main_window", "Subject ID:"))
-        # self.label_total_runs.setText(_translate("main_window", "Number of runs (total):"))
         self.label_task.setText(_translate("main_window", "Number of tasks per run (total):"))
         self.label_session.setText(_translate("main_window", "Current session number:"))
         self.label_run.setText(_translate("main_window", "Current run number:"))
         self.radio_mi.setText(_translate("main_window", "Motor imagery"))
         self.radio_me.setText(_translate("main_window", "Motor execution"))
-        # self.radio_fb_on.setText(_translate("main_window", "Feedback ON"))
-        # self.radio_fb_off.setText(_translate("main_window", "Feedback OFF"))
-        # self.radio_erds_single.setText(_translate("main_window", "ERDS: single channel"))
-        # self.radio_erds_average.setText(_translate("main_window", "ERDS: average channels"))
         self.l_input.setText(_translate("main_window", "Input"))
         self.l_actions.setText(_translate("main_window", "BCI"))
         self.l_tools.setText(_translate("main_window", "Tools"))
@@ -383,8 +316,6 @@ class UiUserInterface(object):
         self.radio_2d.setText(_translate("main_window", "2D"))
         self.radio_3d.setText(_translate("main_window", "3D"))
         self.button_update_settings.setText(_translate("main_window", "Update Settings"))
-
-
 
 
 if __name__ == "__main__":
