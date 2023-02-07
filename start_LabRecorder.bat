@@ -1,0 +1,2 @@
+start LabRecorder/LabRecorder.exe
+pause
