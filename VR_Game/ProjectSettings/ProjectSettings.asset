@@ -13,7 +13,7 @@ PlayerSettings:
   useOnDemandResources: 0
   accelerometerFrequency: 60
   companyName: BCI Lab TU Graz
-  productName: BCI-game
+  productName: BCI-game-2D
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
@@ -153,7 +153,7 @@ PlayerSettings:
   androidSupportedAspectRatio: 1
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
-    Standalone: com.BCILabTUGraz.BCI-game
+    Standalone: com.BCILabTUGraz.BCI-game-3D
   buildNumber:
     Standalone: 0
     iPhone: 0
@@ -270,7 +270,7 @@ PlayerSettings:
   - m_BuildTarget: 
     m_Icons:
     - serializedVersion: 2
-      m_Icon: {fileID: 2800000, guid: d442ff05390aee04ca2412d5357ad11a, type: 3}
+      m_Icon: {fileID: 2800000, guid: c92d27faef6b2cc40b730a8665b69552, type: 3}
       m_Width: 128
       m_Height: 128
       m_Kind: 0
