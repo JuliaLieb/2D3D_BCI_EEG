@@ -9,7 +9,7 @@ public class ObjectsController : MonoBehaviour
     public GameObject arrowLeft;
 	public GameObject arrowRight;
 	public GameObject brain;
-    public GameObject glow;
+    //public GameObject glow;
 
     /// <summary>
     /// Called once at start of game and subscribes methods to the events.
@@ -55,7 +55,7 @@ public class ObjectsController : MonoBehaviour
 
         fixationCross.SetActive(false);
         brain.SetActive(true);
-        glow.SetActive(true);
+        //glow.SetActive(true);
     }
 
     /// <summary>
@@ -67,6 +67,6 @@ public class ObjectsController : MonoBehaviour
 		arrowLeft.SetActive(false);
 		arrowRight.SetActive(false);
 		brain.SetActive(false);
-        glow.SetActive(false);	
+        //glow.SetActive(false);	
 	}
 }

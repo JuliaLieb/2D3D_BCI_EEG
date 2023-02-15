@@ -96,6 +96,8 @@ class UiUserInterface(object):
 
     def calc_results_button_click(self):
         print("Results could be calculated here.")
+        cwd = os.getcwd()
+        subprocess.Popen("python " + cwd + "/FeedbackModel/accuracy_results.py")
 
     """ -----------------------
     User Interface Setup
