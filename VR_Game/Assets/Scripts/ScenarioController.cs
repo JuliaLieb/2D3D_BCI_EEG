@@ -226,8 +226,9 @@ public class ScenarioController : MonoBehaviour
     /// Triggers the "session finished" event.
     /// </summary>
 	void BlockFinished() 
-    {
+    {  
 		startSession = false;
+		SceneManager.LoadScene("MenuScene");
 		EventManager.instance.OnTriggerSessionFinished();
     }
 
@@ -236,9 +237,9 @@ public class ScenarioController : MonoBehaviour
     /// </summary>
 	public void QuitGame()
     {
-#if UNITY_EDITOR
+		#if UNITY_EDITOR
 			UnityEditor.EditorApplication.isPlaying = false;
-#else
+		#else
 		SceneManager.LoadScene("MenuScene");
 
 		// Application.Quit();

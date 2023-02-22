@@ -1,3 +1,4 @@
 # ignore measured data
 SubjectData/S*
 VR_Game/Library*
+Data_Backup/*

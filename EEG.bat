@@ -1,1 +1,0 @@
-python FeedbackModel/eeg_simulation.py
