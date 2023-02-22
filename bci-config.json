@@ -69,12 +69,12 @@
     "gui-input-settings": {
         "subject-id": "S1",
         "total-runs": 4,
-        "n-per-task": 40,
-        "n-run": 1,
-        "n-session": 1,
-        "motor-mode": "ME",
-        "fb-mode": "off",
-        "dimension-mode": "3D"
+        "n-per-task": 2,
+        "n-run": 2,
+        "n-session": 2,
+        "motor-mode": "MI",
+        "fb-mode": "on",
+        "dimension-mode": "2D"
     },
     "eeg-settings": {
         "sample-rate": 500,

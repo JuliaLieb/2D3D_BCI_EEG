@@ -228,6 +228,7 @@ public class ScenarioController : MonoBehaviour
 	void BlockFinished() 
     {
 		startSession = false;
+		SceneManager.LoadScene("MenuScene");
 		EventManager.instance.OnTriggerSessionFinished();
     }
 

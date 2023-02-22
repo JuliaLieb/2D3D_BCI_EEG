@@ -135,13 +135,14 @@ def calculate_accuracy(current_config_file):
 
     subject_id = config['gui-input-settings']['subject-id']
     session = str(config['gui-input-settings']['n-session'])
+    motor_mode = config['gui-input-settings']['motor-mode']
     run = str(config['gui-input-settings']['n-run'])
 
     # for modality in modalities:
     if int(run) == 1:
         print("1st run only for training of classifier - no accuracy can be computed.")
     elif int(run) > 1:
-        file = root_dir + subject_id + '/data/' + 'lda_ses' + session + '_run' + run + '.mat'
+        file = root_dir + subject_id + '/data/' + 'lda_ses' + session + '_run' + run + '_' + motor_mode + '.mat'
         data_lda = scipy.io.loadmat(file)['lda'].T
         data_lda, labels = extract_epochs(data_lda, n_samples_task)
         accuracy = compute_accuracy(data_lda, labels)
