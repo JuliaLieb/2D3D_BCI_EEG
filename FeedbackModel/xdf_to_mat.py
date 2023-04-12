@@ -125,7 +125,8 @@ def xdf_to_mat(config):
     dimension = config['gui-input-settings']['dimension-mode']
     subject_id = config['gui-input-settings']['subject-id']
     session = str(config['gui-input-settings']['n-session'])
-    run = str(config['gui-input-settings']['n-run'])
+    #run = str(config['gui-input-settings']['n-run'])
+    run = str(1)
     # ------------------------------------------------------
 
     cwd = os.getcwd()

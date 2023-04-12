@@ -277,7 +277,8 @@ if __name__ == "__main__":
     dimension = config['gui-input-settings']['dimension-mode']
     subject_id = config['gui-input-settings']['subject-id']
     session = str(config['gui-input-settings']['n-session'])
-    run = str(config['gui-input-settings']['n-run'])
+    #run = str(config['gui-input-settings']['n-run'])
+    run = str(1)
     # ------------------------------------------------------
 
     xdf_to_mat.xdf_to_mat(config)  # convert .xdf to .mat
