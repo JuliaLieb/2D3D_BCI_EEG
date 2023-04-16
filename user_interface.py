@@ -70,7 +70,7 @@ class UiUserInterface(object):
         if self.radio_3d.isChecked():
             subprocess.Popen(cwd + "\\VR_Game\\BCI-game-3D\\BCI-game-3D.exe", cwd = cwd + "\\VR_Game") #Unity game for VR
         else:
-            subprocess.Popen(cwd + "\\VR_Game\\BCI-game-2D\\BCI-game-2D.exe", cwd=cwd + "\\VR_Game") #Unity game without VR
+            subprocess.Popen(cwd + "\\VR_Game_2D\\BCI-game-2D\\BCI-game-2D.exe", cwd=cwd + "\\VR_Game") #Unity game without VR
 
     def lsl_recorder_button_click(self):
         print("Click Lab Recorder")

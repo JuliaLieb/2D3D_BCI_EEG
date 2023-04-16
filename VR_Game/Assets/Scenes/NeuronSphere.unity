@@ -263,12 +263,6 @@ ReflectionProbe:
   m_UseOcclusionCulling: 1
   m_Importance: 1
   m_CustomBakedTexture: {fileID: 0}
---- !u!1 &323647811 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: cd952b8d4d8692a47baf6335740a78bd,
-    type: 3}
-  m_PrefabInstance: {fileID: 1478084024}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &458548934
 GameObject:
   m_ObjectHideFlags: 0
@@ -350,7 +344,6 @@ MonoBehaviour:
   arrowLeft: {fileID: 1495367337}
   arrowRight: {fileID: 1397419823}
   brain: {fileID: 1343563342}
-  glow: {fileID: 323647811}
 --- !u!114 &458548939
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1462,7 +1455,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1687258581}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.5, z: 0}
+  m_LocalPosition: {x: 0, y: -0.8, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 64603845}
@@ -1778,9 +1771,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f855688d65d050f459bd0456c45df592, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numberRun: 1
   showFeedback: 0
-  startSession: 1
 --- !u!4 &2133819739
 Transform:
   m_ObjectHideFlags: 0

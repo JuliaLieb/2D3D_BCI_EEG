@@ -99,7 +99,7 @@ def xdf_to_mat_file(current_config_file, cwd):
     eeg_with_labels = add_class_labels(stream_eeg, stream_marker)
     save_to_mat(out_dir+'/eeg_ses' + session + '_run' + run + '.mat', 'eeg',  eeg_with_labels)
 
-def extract_epochs(data, n_samples):
+'''def extract_epochs(data, n_samples):
     data_labels = data[0, :]
     data = data[1:, :]
     indexes = np.where((data_labels == 121) | (data_labels == 122))[0]
@@ -114,7 +114,34 @@ def extract_epochs(data, n_samples):
         epochs.append(data[:, idx1:idx2])
 
     return epochs, np.array(data_labels[indexes] - 121, dtype=int)
+'''
 
+def extract_epochs(data, n):
+    cue_indexes = np.where(data[0, :] != 0)[0]
+    cl_labels = np.array(data[0, cue_indexes]-121, dtype=int)
+    data = data[1:, :]
+    epochs = []
+    min_length = n
+    n_trials = len(cue_indexes)
+
+    for i in range(n_trials):
+        idx1 = cue_indexes[i]
+        idx2 = idx1 + n
+        if i < n_trials-1 and idx2 > cue_indexes[i+1]:
+            idx2 = cue_indexes[i+1]
+        epochs.append(data[:, idx1:idx2])
+        min_length = np.min([min_length, idx2-idx1])
+
+    data_nd = np.zeros((len(epochs), np.shape(data)[0], min_length))
+    data_nd[:] = None
+
+    # list to np array
+    i = 0
+    for e in epochs:
+        data_nd[i, :, :] = e[:, 0:min_length]
+        i += 1
+
+    return data_nd, min_length, cl_labels
 def compute_accuracy(data, class_labels):
 
     acc_per_trial = []
@@ -161,8 +188,8 @@ if __name__ == "__main__":
 
     # convert all .xdf files which have corresponding .json file to .mat
     all_config_files = glob.glob(root_dir + subject_id + '/*.json')
-    for current_config_file in all_config_files:
-        xdf_to_mat_file(current_config_file, cwd)
+    #for current_config_file in all_config_files:
+    #    xdf_to_mat_file(current_config_file, cwd)
 
     # for all available .json files: calculate accuracy
     for current_config_file in all_config_files:
