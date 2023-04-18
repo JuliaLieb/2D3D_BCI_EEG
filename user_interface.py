@@ -54,9 +54,9 @@ class UiUserInterface(object):
         subprocess.Popen("python " + cwd + "/FeedbackModel/eeg_simulation.py")
 
 
-    def stream_viewer_button_click(self):
+    """def stream_viewer_button_click(self):
         print("Click Stream Viewer.")
-        subprocess.Popen("lsl_viewer.exe")
+        subprocess.Popen("lsl_viewer.exe")"""
 
 
     def train_button_click(self):
@@ -96,7 +96,8 @@ class UiUserInterface(object):
 
     def calc_results_button_click(self):
         cwd = os.getcwd()
-        subprocess.Popen("python " + cwd + "/FeedbackModel/accuracy_results.py")
+        # subprocess.Popen("python " + cwd + "/FeedbackModel/accuracy_results.py")
+        subprocess.Popen("python " + cwd + "/FeedbackModel/calculate_acc_results.py")
 
     """ -----------------------
     User Interface Setup
@@ -236,19 +237,19 @@ class UiUserInterface(object):
 
         """EEG simulation button"""
         self.button_eeg_sim = QtWidgets.QPushButton(main_window)
-        self.button_eeg_sim.setGeometry(QtCore.QRect(550, 140, 160, 32))
+        self.button_eeg_sim.setGeometry(QtCore.QRect(550, 160, 160, 32))
         self.button_eeg_sim.setObjectName("button_EEG_sim")
         self.button_eeg_sim.clicked.connect(self.eeg_sim_button_click)  # button event
 
         """Opem stream viewer button"""
-        self.button_stream_viewer = QtWidgets.QPushButton(main_window)
+        """self.button_stream_viewer = QtWidgets.QPushButton(main_window)
         self.button_stream_viewer.setGeometry(QtCore.QRect(550, 190, 160, 32))
         self.button_stream_viewer.setObjectName("button_LSL_check")
-        self.button_stream_viewer.clicked.connect(self.stream_viewer_button_click)  # button event
+        self.button_stream_viewer.clicked.connect(self.stream_viewer_button_click)  # button event"""
 
         """Start LSL recorder button"""
         self.button_lsl_recorder = QtWidgets.QPushButton(main_window)
-        self.button_lsl_recorder.setGeometry(QtCore.QRect(550, 240, 160, 32))
+        self.button_lsl_recorder.setGeometry(QtCore.QRect(550, 210, 160, 32))
         self.button_lsl_recorder.setObjectName("button_LSL_recorder")
         self.button_lsl_recorder.clicked.connect(self.lsl_recorder_button_click)  # button event
 
@@ -311,7 +312,7 @@ class UiUserInterface(object):
         self.l_tools.setText(_translate("main_window", "Tools"))
         self.button_close.setText(_translate("main_window", "Close"))
         self.button_eeg_sim.setText(_translate("main_window", "EEG Simulation"))
-        self.button_stream_viewer.setText(_translate("main_window", "Open Stream Viewer"))
+        #self.button_stream_viewer.setText(_translate("main_window", "Open Stream Viewer"))
         self.button_open_bci.setText(_translate("main_window", "Open Unity Game"))
         self.button_lsl_recorder.setText(_translate("main_window", "Open Lab Recorder"))
         self.button_train_classifier.setText(_translate("main_window", "Train Classifier"))
