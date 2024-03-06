@@ -1,4 +1,8 @@
 # ignore measured data
 SubjectData/S*
-VR_Game/Library*
-VR_Game_2D/Library*
+# R_Game/Library*
+# VR_Game_2D/Library*
+VR_Game/*
+VR_Game_2D/*
+.idea/*
+bci-config.json

@@ -16,6 +16,31 @@ class UiUserInterface(object):
     def __init__(self):
         self.func_fb = None
 
+    def change_cfg_file(self, file_path, new_values):  # new values= [subject, session, run, ME/MI, 2/3D]
+        try:
+            with open(file_path, 'r') as file:
+                lines = file.readlines()
+            cwd = os.getcwd()
+            cwd = cwd.replace('\\', '/')
+            new_line_21 = 'StorageLocation= ' + cwd + '/SubjectData/' + str(new_values[0]) + '/' + str(
+                new_values[0]) + '_ses' + str(new_values[1]) + '_run' + str(new_values[2]) + '_' + new_values[3] + '_' + \
+                          new_values[4] + '.xdf\n'
+            print(new_line_21)
+            if len(lines) >= 25:
+                lines[20] = new_line_21
+
+                with open(file_path, 'w') as file:
+                    file.writelines(lines)
+
+                print(f'LabRecorder saves EEG data according to GUI settings: {file_path}.')
+            else:
+                print(f'{file_path} has less than 25 lines.')
+
+        except FileNotFoundError:
+            print(f'File {file_path} not found.')
+        except Exception as e:
+            print(f'An error has occurred: {e}')
+
     """ -----------------------
     Button Events (Click)
     ------------------------"""
@@ -47,6 +72,10 @@ class UiUserInterface(object):
 
         tasks_per_run = int(self.input_tasks.value())
         sequence_generator.sequence_generator(subject_id, tasks_per_run, n_run, n_session, motor_mode, dimension_mode)
+
+        file_path_lr = './LabRecorder/LabRecorder.cfg'
+        new_values = [subject_id, n_session, n_run, motor_mode, dimension_mode]
+        self.change_cfg_file(file_path_lr, new_values)
 
     def eeg_sim_button_click(self):
         print("Click EEG simulation.")
@@ -321,7 +350,6 @@ class UiUserInterface(object):
         self.radio_2d.setText(_translate("main_window", "2D"))
         self.radio_3d.setText(_translate("main_window", "3D"))
         self.button_update_settings.setText(_translate("main_window", "Update Settings"))
-
 
 if __name__ == "__main__":
     current_config = bci_config.read_bci_config()
