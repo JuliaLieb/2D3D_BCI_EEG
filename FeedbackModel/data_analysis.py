@@ -123,7 +123,8 @@ if __name__ == "__main__":
     cwd = os.getcwd()
 
     # Read BCI Configuration
-    config_file = cwd + '/bci-config.json'
+    #config_file = cwd + '/bci-config.json'
+    config_file = 'C:/2D3D_BCI_EEG/bci-config.json'
     with open(config_file) as json_file:
         config = json.load(json_file)
     # ------------- Subject specific variables -------------
@@ -134,10 +135,11 @@ if __name__ == "__main__":
     run = str(config['gui-input-settings']['n-run'])
     # ------------------------------------------------------
 
-    root_dir = cwd + '/SubjectData/'
+    root_dir = cwd + './SubjectData/'
 
     file_name = subject_id + '_ses' + session + '_run' + run + '_' + motor_mode + '_' + dimension
-    xdf_file_path = root_dir + subject_id + '/' + file_name + '.xdf'
+    #xdf_file_path = root_dir + subject_id + '/' + file_name + '.xdf'
+    xdf_file_path = 'C:/2D3D_BCI_EEG/SubjectData/S5/' + file_name + '.xdf'
 
     stream_eeg, stream_marker, stream_fb_lda, stream_fb_erds = load_xdf(xdf_file_path,
                                                                         config['general-settings']['lsl-streams'])
@@ -162,15 +164,13 @@ if __name__ == "__main__":
     #raw.plot(scalings=dict(eeg=100e-6), duration=1, start=14)
     """
 
-
-
-    """
-
-     eeg_time, eeg_data = get_eeg_channel_data(stream_eeg, 2)
-     plt_eeg(eeg_time, eeg_data)
-     #ex_plt(xdf_file_path)
+    #"""
+    eeg_time, eeg_data = get_eeg_channel_data(stream_eeg, 2)
+    plt_eeg(eeg_time, eeg_data)
+    ex_plt(xdf_file_path)
+    #"""
 
     """
     x = int(True)
-    print(x)
-
+    print(x, ' This is just a test integer!')
+    """

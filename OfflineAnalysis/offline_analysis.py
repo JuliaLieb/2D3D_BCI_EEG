@@ -220,16 +220,18 @@ def analyze_eeg(eeg):
 
 if __name__ == "__main__":
     cwd = os.getcwd()
-    root_dir = cwd + '/../SubjectData/diana/'
+    #root_dir = cwd + './SubjectData/S5/'
+    #root_dir = cwd + './SubjectData/S5/'
 
-    modalities = ['ME', 'MI']
-    subject_id = 'sub-P001'
+    #modalities = ['ME', 'MI']
+    modalities = ['ME']
+    subject_id = 'S5'
 
-    dir_plots = root_dir + subject_id + '/plots/erds_eeg'
+    dir_plots = 'C:/2D3D_BCI_EEG/SubjectData/S5/plots/erds_eeg'
     if not os.path.exists(dir_plots):
         os.makedirs(dir_plots)
 
-    config_file = root_dir + subject_id + '/bci-config.json'
+    config_file = 'C:/2D3D_BCI_EEG/SubjectData/S5/CONFIG_S5_ses1_run2_ME_2D.json'
     # if modality == 'ME' and (run == '1' or run == '2'):
     #     config_file = root_dir + subject_id + '/bci-config_run1_run2.json'
 
@@ -245,7 +247,7 @@ if __name__ == "__main__":
     n_ref = int(np.floor(sample_rate * duration_ref))
 
     for modality in modalities:
-        directory = root_dir + subject_id + '/' + modality + '/data'
+        directory = 'C:/2D3D_BCI_EEG/SubjectData/S5/data'
 
         for run in range(1, 4):
             f_name = directory + '/eeg_block'+str(run)+'.mat'
@@ -253,8 +255,8 @@ if __name__ == "__main__":
                 continue
             # LOAD MAT FILES
             data_eeg = scipy.io.loadmat(f_name)['eeg'].T
-            # data_erds = scipy.io.loadmat(directory + '/erds_block'+run+'.mat')['erds'].T
-            # data_lda = scipy.io.loadmat(directory + '/lda_block'+run+'.mat')['lda'].T
+            data_erds = scipy.io.loadmat(directory + '/erds_block'+run+'.mat')['erds'].T
+            data_lda = scipy.io.loadmat(directory + '/lda_block'+run+'.mat')['lda'].T
             #
             # EXTRACT EPOCHS
 
