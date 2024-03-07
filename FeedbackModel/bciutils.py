@@ -254,6 +254,7 @@ class BCI:
         """
 
         inlet_marker = self.resolve_lsl_stream(name=self.stream_marker['name'])
+        # print(inlet_marker)
 
         self.thread_classification.start()
         self.thread_erds.start()

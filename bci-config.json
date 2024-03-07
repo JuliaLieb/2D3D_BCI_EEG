@@ -67,14 +67,14 @@
         }
     },
     "gui-input-settings": {
-        "subject-id": "S7",
+        "subject-id": "S5",
         "total-runs": 4,
         "n-per-task": 40,
-        "n-run": 7,
-        "n-session": 7,
-        "motor-mode": "MI",
+        "n-run": 3,
+        "n-session": 1,
+        "motor-mode": "ME",
         "fb-mode": "on",
-        "dimension-mode": "3D"
+        "dimension-mode": "2D"
     },
     "eeg-settings": {
         "sample-rate": 500,

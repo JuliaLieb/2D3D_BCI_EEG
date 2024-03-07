@@ -8,6 +8,7 @@ import sys
 import os
 from PyQt5 import QtCore, QtGui, QtWidgets
 import subprocess
+import psutil
 
 from FeedbackModel import sequence_generator, bci_config
 
@@ -15,6 +16,19 @@ from FeedbackModel import sequence_generator, bci_config
 class UiUserInterface(object):
     def __init__(self):
         self.func_fb = None
+
+    def close_application(self, application_name):
+        for process in psutil.process_iter(['pid', 'name']):
+            if process.info['name'] == application_name:
+                try:
+                    process = psutil.Process(process.info['pid'])
+                    process.terminate()
+                    print(f'The application {application_name} was closed.')
+                except Exception as e:
+                    print(f'Error when closing application {application_name}: {e}')
+                return
+
+        print(f'Application {application_name} not found.')
 
     def change_cfg_file(self, file_path, new_values):  # new values= [subject, session, run, ME/MI, 2/3D]
         try:
@@ -73,9 +87,15 @@ class UiUserInterface(object):
         tasks_per_run = int(self.input_tasks.value())
         sequence_generator.sequence_generator(subject_id, tasks_per_run, n_run, n_session, motor_mode, dimension_mode)
 
+        # Update config file of LabRecorder, saves file according to input settings instead of LabRecorder internal settings
         file_path_lr = './LabRecorder/LabRecorder.cfg'
         new_values = [subject_id, n_session, n_run, motor_mode, dimension_mode]
         self.change_cfg_file(file_path_lr, new_values)
+
+        # Close files in case of changed input settings: applications load input settings when opened.
+        self.close_application('LabRecorder.exe')
+        self.close_application('BCI-game-2D.exe')
+        self.close_application('BCI-game-3D.exe')
 
     def eeg_sim_button_click(self):
         print("Click EEG simulation.")
@@ -116,11 +136,9 @@ class UiUserInterface(object):
             return None
         self.func_fb = subprocess.Popen("python " + cwd + "./FeedbackModel/feedback_model.py")
 
-    def proc_kill(self):
-        self.func_fb.kill()
 
     def close_button_click(self):
-        self.proc_kill()
+        self.close_application('signalserver.exe')
         MainWindow.close()
 
     def calc_results_button_click(self):
@@ -170,7 +188,7 @@ class UiUserInterface(object):
         """Trials per task"""
         current_tasks = current_config['gui-input-settings']['n-per-task']
         self.label_task = QtWidgets.QLabel(main_window)
-        self.label_task.setGeometry(QtCore.QRect(60, 250, 261, 18))
+        self.label_task.setGeometry(QtCore.QRect(60, 250, 261, 25))
         self.label_task.setObjectName("label_task")
         self.input_tasks = QtWidgets.QSpinBox(main_window)
         self.input_tasks.setGeometry(QtCore.QRect(340, 250, 60, 24))
@@ -331,7 +349,7 @@ class UiUserInterface(object):
         main_window.setWindowTitle(_translate("main_window", "BCI User Interface"))
         self.l_title.setText(_translate("main_window", "2D & 3D Visualization of EEG-Based BCI"))
         self.label_id.setText(_translate("main_window", "Subject ID:"))
-        self.label_task.setText(_translate("main_window", "Number of tasks per run (total):"))
+        self.label_task.setText(_translate("main_window", "Run 1 has 20 tasks per run.\nNumber of tasks per run (total):"))
         self.label_session.setText(_translate("main_window", "Current session number:"))
         self.label_run.setText(_translate("main_window", "Current run number:"))
         self.radio_mi.setText(_translate("main_window", "Motor imagery"))
