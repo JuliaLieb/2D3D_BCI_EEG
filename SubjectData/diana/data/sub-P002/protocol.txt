@@ -1,0 +1,18 @@
+21.03.22
+
+workspace: LiveAmpDefault, 
+sub-P002: female, 56cm cap size
+
+ME: pulsed hand closing
+MI: imagine yourself pulsed hand closing
+
+run 1: ME MI_run1 no feedback       5s
+run 2: ME MI_run2 feedback average  5s
+run 3: ME MI_run3 feedback single   7s
+run 4: MI MI_run1 no feedback       7s
+run 5: MI MI_run2 feedback average  7s
+run 6: MI MI_run3 feedback single   7s
+
+ATTENTION:
+
+

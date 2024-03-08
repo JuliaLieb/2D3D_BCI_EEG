@@ -1,0 +1,18 @@
+28.02.22
+
+workspace: LiveAmpDefault, 
+sub-P001: female, 55cm head -> 56cm cap size
+
+ME: squeeze ball constantly
+MI: imagine yourself squeezing constantly
+
+ses-S001: ME MI_run1 no feedback
+ses-S002: ME MI_run2 feedback average  
+ses-S003: ME MI_run3 feedback single
+ses-S004: MI MI_run1 no feedback
+ses-S005: MI MI_run2 feedback single
+
+ATTENTION:
+	- session 2: Cz counted as roi 4!
+	- xdf-to-mat: maybe mat was append with old one?
+

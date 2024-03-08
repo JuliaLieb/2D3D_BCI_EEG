@@ -212,7 +212,7 @@ def analyze_eeg(eeg):
         fig.colorbar(axes[0].images[-1], cax=axes[-1])
         fig.suptitle(f"ERDS - {event} hand")
 
-        plt.savefig('{}/erds_{}_{}_{}_{}{}.png'.format(dir_plots, modality, str(run), event, picks[0], picks[1]), format='png')
+        plt.savefig('{}/erds_{}_{}_{}_{}{}.png'.format(dir_plots, motor_mode, str(run), event, picks[0], picks[1]), format='png')
         plt.show()
 
     return eeg
@@ -220,25 +220,16 @@ def analyze_eeg(eeg):
 
 if __name__ == "__main__":
     cwd = os.getcwd()
-    #root_dir = cwd + './SubjectData/S5/'
-    #root_dir = cwd + './SubjectData/S5/'
 
-    #modalities = ['ME', 'MI']
-    modalities = ['ME']
-    subject_id = 'S5'
-
-    dir_plots = 'C:/2D3D_BCI_EEG/SubjectData/S5/plots/erds_eeg'
-    if not os.path.exists(dir_plots):
-        os.makedirs(dir_plots)
-
-    config_file = 'C:/2D3D_BCI_EEG/SubjectData/S5/CONFIG_S5_ses1_run2_ME_2D.json'
-    # if modality == 'ME' and (run == '1' or run == '2'):
-    #     config_file = root_dir + subject_id + '/bci-config_run1_run2.json'
-
-    #with open(config_file) as json_file:
-    #    config = json.load(json_file)
+    config_file = cwd + '/../bci-config.json'
     with open(config_file) as json_file:
         config = json.load(json_file)
+
+    subject_id = config['gui-input-settings']['subject-id']
+    n_session = config['gui-input-settings']['n-session']
+    n_run = config['gui-input-settings']['n-run']
+    motor_mode = config['gui-input-settings']['motor-mode']
+    dimension = config['gui-input-settings']['dimension-mode']
 
     sample_rate = config['eeg-settings']['sample-rate']
     duration_ref = config['general-settings']['timing']['duration-ref']
@@ -246,34 +237,40 @@ if __name__ == "__main__":
 
     n_ref = int(np.floor(sample_rate * duration_ref))
 
-    for modality in modalities:
-        directory = 'C:/2D3D_BCI_EEG/SubjectData/S5/data'
 
-        for run in range(1, 4):
-            f_name = directory + '/eeg_block'+str(run)+'.mat'
-            if not os.path.exists(f_name):
-                continue
-            # LOAD MAT FILES
-            data_eeg = scipy.io.loadmat(f_name)['eeg'].T
-            data_erds = scipy.io.loadmat(directory + '/erds_block'+run+'.mat')['erds'].T
-            data_lda = scipy.io.loadmat(directory + '/lda_block'+run+'.mat')['lda'].T
-            #
-            # EXTRACT EPOCHS
+    subject_directory = cwd + '/../SubjectData/' + subject_id + '-ses' + str(n_session) + '/'
+    dir_plots = subject_directory + 'plots'
+    if not os.path.exists(dir_plots):
+        os.makedirs(dir_plots)
+    dir_files = subject_directory + 'data'
 
-            duration_task = duration_cue + config['general-settings']['timing']['duration-task']
-            if subject_id == 'sub-P002' and modality == 'ME' and (run == 1 or run == 2):
-                duration_task = duration_cue + 3.75
+    for run in range(2, 4):
+        eeg_name = dir_files + '/eeg_run'+str(run) + '_' + motor_mode +'.mat'
+        erds_name = dir_files + '/erds_run'+str(run) + '_' + motor_mode + '.mat'
+        lda_name = dir_files + '/lda_run'+str(run) + '_' + motor_mode  +'.mat'
+        if not os.path.exists(eeg_name):
+            continue
+        # LOAD MAT FILES
+        data_eeg = scipy.io.loadmat(eeg_name)['eeg'].T
+        data_erds = scipy.io.loadmat(erds_name)['erds'].T
+        data_lda = scipy.io.loadmat(lda_name)['lda'].T
+        #
+        # EXTRACT EPOCHS
 
-            n_samples_task = int(np.floor(sample_rate * duration_task))
-            n_samples_trial = n_ref + n_samples_task
+        duration_task = duration_cue + config['general-settings']['timing']['duration-task']
+        if subject_id == 'sub-P002' and motor_mode == 'ME' and (run == 1 or run == 2):
+            duration_task = duration_cue + 3.75
 
-            indexes_class_1 = np.where(data_eeg[0, :] == 121)[0]
-            indexes_class_2 = np.where(data_eeg[0, :] == 122)[0]
-            indexes_class_all = np.sort(np.append(indexes_class_1, indexes_class_2), axis=0)
+        n_samples_task = int(np.floor(sample_rate * duration_task))
+        n_samples_trial = n_ref + n_samples_task
 
-            n_trials = len(indexes_class_all)
-            class_labels = data_eeg[0, indexes_class_all] - 121
+        indexes_class_1 = np.where(data_eeg[0, :] == 121)[0]
+        indexes_class_2 = np.where(data_eeg[0, :] == 122)[0]
+        indexes_class_all = np.sort(np.append(indexes_class_1, indexes_class_2), axis=0)
 
-            # COMPUTE ERDS MAP FROM EEG SIGNAL
-            data_eeg = analyze_eeg(data_eeg)
+        n_trials = len(indexes_class_all)
+        class_labels = data_eeg[0, indexes_class_all] - 121
+
+        # COMPUTE ERDS MAP FROM EEG SIGNAL
+        data_eeg = analyze_eeg(data_eeg)
 
