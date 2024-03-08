@@ -30,6 +30,15 @@ class UiUserInterface(object):
 
         print(f'Application {application_name} not found.')
 
+    """
+    def stop_fb_stream(selfself, stream_name):
+        try:
+            os.kill(outlet_fb_erds, #outlet_fb_cl
+        except:
+            print('Could not find LSL streams')
+
+    """
+
     def change_cfg_file(self, file_path, new_values):  # new values= [subject, session, run, ME/MI, 2/3D]
         try:
             with open(file_path, 'r') as file:

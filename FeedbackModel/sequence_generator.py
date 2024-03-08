@@ -40,8 +40,7 @@ def sequence_generator(subject_id, tasks_per_run, n_run, n_session, motor_mode, 
 
     # subject backup recording
     directory_backup = "SubjectData/" + subject_id + '-ses' + str(n_session) + '/'
-    file_backup = open(directory_backup + "SEQ_" + subject_id + '_run' + str(
-        n_run) + '_' + motor_mode + '_' + dimension_mode + ".txt", "w")
+    file_path = directory_backup + "SEQ_" + subject_id + '_run' + str(n_run) + '_' + motor_mode + '_' + dimension_mode + ".txt"
 
     # Check existence of paths and files
     if not os.path.exists(directory):
@@ -49,12 +48,22 @@ def sequence_generator(subject_id, tasks_per_run, n_run, n_session, motor_mode, 
     if not os.path.exists(directory_backup):
         os.makedirs(directory_backup)
 
-    if n_run == 1:
-        t = 10  # for classification run: always 10 runs per condition (20 in total)
-    else:
-        t = int(tasks_per_run/2)
-    sequence = create_sequence(t, tasks)
+    if os.path.exists(file_path):
+        print("Sequence already exists")
+        with open(file_path, "r") as seq:
+            sequence = seq.read()
+        file_object.write(sequence)
 
-    for trial in sequence:
-        file_object.write(trial + "\n")
-        file_backup.write(trial + "\n")
+    else:
+        print("Create new sequence")
+        file_backup = open(file_path, "w")
+
+        if n_run == 1:
+            t = 10  # for classification run: always 10 runs per condition (20 in total)
+        else:
+            t = int(tasks_per_run/2)
+        sequence = create_sequence(t, tasks)
+
+        for trial in sequence:
+            file_object.write(trial + "\n")
+            file_backup.write(trial + "\n")

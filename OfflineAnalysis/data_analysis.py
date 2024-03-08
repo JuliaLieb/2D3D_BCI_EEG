@@ -124,7 +124,7 @@ if __name__ == "__main__":
 
     # Read BCI Configuration
     #config_file = cwd + '/bci-config.json'
-    config_file = 'C:/2D3D_BCI_EEG/bci-config.json'
+    config_file = '/bci-config.json'
     with open(config_file) as json_file:
         config = json.load(json_file)
     # ------------- Subject specific variables -------------

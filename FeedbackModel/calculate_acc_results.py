@@ -90,14 +90,21 @@ def xdf_to_mat_file(current_config_file, cwd):
         stream_eeg, stream_marker, stream_erds, stream_lda = load_xdf(config, xdf_file_path, is_feedback)
 
         erds_with_labels = add_class_labels(stream_erds, stream_marker)
+        xdf_file_erds = out_dir+'/erds' + '_run' + run + "_" + motor_mode + '.mat'
+        if not os.path.exists(xdf_file_erds):
+            save_to_mat(xdf_file_erds, 'erds', erds_with_labels)
+
         lda_with_labels = add_class_labels(stream_lda, stream_marker)
-        save_to_mat(out_dir+'/erds' + '_run' + run + "_" + motor_mode + '.mat', 'erds', erds_with_labels)
-        save_to_mat(out_dir+'/lda' + '_run' + run + "_" + motor_mode + '.mat', 'lda', lda_with_labels)
+        xdf_file_lda = out_dir + '/lda' + '_run' + run + "_" + motor_mode + '.mat'
+        if not os.path.exists(xdf_file_lda):
+            save_to_mat(xdf_file_lda, 'lda', lda_with_labels)
     else:
         stream_eeg, stream_marker = load_xdf(config, xdf_file_path, is_feedback)
 
     eeg_with_labels = add_class_labels(stream_eeg, stream_marker)
-    save_to_mat(out_dir+'/eeg' + '_run' + run + "_" + motor_mode + '.mat', 'eeg',  eeg_with_labels)
+    xdf_file_eeg = out_dir+'/eeg' + '_run' + run + "_" + motor_mode + '.mat'
+    if not os.path.exists(xdf_file_eeg):
+        save_to_mat(xdf_file_eeg, 'eeg',  eeg_with_labels)
 
 def extract_epochs(data, n_samples):
     data_labels = data[0, :]
@@ -139,9 +146,9 @@ def calculate_accuracy(current_config_file):
     motor_mode = str(config['gui-input-settings']['motor-mode'])
 
     # for modality in modalities:
-    if int(run) == 1:
-        print("1st run only for training of classifier - no accuracy can be computed.")
-    elif int(run) > 1:
+    #if int(run) == 1:
+        # print("1st run only for training of classifier - no accuracy can be computed.")
+    if not int(run) == 1:
         file = root_dir + subject_id + '-ses' + str(n_session) + '/data/' + 'lda' + '_run' + run + "_" + motor_mode + '.mat'
         data_lda = scipy.io.loadmat(file)['lda'].T
         data_lda, labels = extract_epochs(data_lda, n_samples_task)
