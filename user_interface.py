@@ -36,8 +36,8 @@ class UiUserInterface(object):
                 lines = file.readlines()
             cwd = os.getcwd()
             cwd = cwd.replace('\\', '/')
-            new_line_21 = 'StorageLocation= ' + cwd + '/SubjectData/' + str(new_values[0]) + '/' + str(
-                new_values[0]) + '_ses' + str(new_values[1]) + '_run' + str(new_values[2]) + '_' + new_values[3] + '_' + \
+            new_line_21 = 'StorageLocation= ' + cwd + '/SubjectData/' + str(new_values[0]) + '-ses' + str(new_values[1]) + '/' + str(
+                new_values[0]) + '_run' + str(new_values[2]) + '_' + new_values[3] + '_' + \
                           new_values[4] + '.xdf\n'
             print(new_line_21)
             if len(lines) >= 25:

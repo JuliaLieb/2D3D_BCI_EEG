@@ -67,10 +67,10 @@
         }
     },
     "gui-input-settings": {
-        "subject-id": "S5",
+        "subject-id": "S6",
         "total-runs": 4,
         "n-per-task": 40,
-        "n-run": 3,
+        "n-run": 2,
         "n-session": 1,
         "motor-mode": "ME",
         "fb-mode": "on",

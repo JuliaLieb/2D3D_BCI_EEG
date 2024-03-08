@@ -132,13 +132,13 @@ def xdf_to_mat(config):
     root_dir = cwd + '/SubjectData/'
 
 
-    file_name = subject_id + '_ses' + session + '_run' + run + '_' + motor_mode + '_' + dimension
-    xdf_file_path = root_dir + subject_id + '/' + file_name + '.xdf'
-    mat_file_path = root_dir + subject_id + '/' + file_name + '.mat'
+    file_name = subject_id + '_run' + run + '_' + motor_mode + '_' + dimension
+    xdf_file_path = root_dir + subject_id + '-ses' + session + '/' + file_name + '.xdf'
+    mat_file_path = root_dir + subject_id + '-ses' + session + '/' + file_name + '.mat'
 
     if not os.path.exists(xdf_file_path):
         print(".xdf file for this configuration does not exist.")
-        os.makedirs(root_dir + subject_id + '/')
+        os.makedirs(root_dir + subject_id + '-ses' + session + '/')
 
     # Extract the eeg and marker lsl stream from the xdf file
     stream_eeg, stream_marker = load_xdf(xdf_file_path, config['general-settings']['lsl-streams'])

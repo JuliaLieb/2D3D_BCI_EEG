@@ -32,37 +32,40 @@ def compute_accuracy(data, class_labels):
         # plt.plot(epoch[0, :] == cl)
         # plt.show()
 
-    # data_nd = np.zeros((len(data), np.shape(data[0])[0], n_samples_task))
-    # data_nd[:] = None
-    #
-    # # list to np array
-    # i = 0
-    # for e in data:
-    #     data_nd[i, :, 0:np.shape(e)[1]] = e
-    #     i += 1
-    #
-    # acc_per_sample = np.zeros((len(data), n_samples_task))
-    # for i in range(n_samples_task):
-    #     acc_per_sample[:, i] = data_nd[:,0, i] == class_labels
-    #
-    # tst = np.sum(acc_per_sample, axis=0) / len(data)
-    # plt.plot(tst)
-    # plt.ylim(0, 1)
-    # plt.axhline(0.5, linewidth=1, color="black", linestyle=":")
-    # plt.show()
+    data_nd = np.zeros((len(data), np.shape(data[0])[0], n_samples_task))
+    data_nd[:] = None
+
+    # list to np array
+    i = 0
+    for e in data:
+        data_nd[i, :, 0:np.shape(e)[1]] = e
+        i += 1
+
+    acc_per_sample = np.zeros((len(data), n_samples_task))
+    for i in range(n_samples_task):
+        acc_per_sample[:, i] = data_nd[:,0, i] == class_labels
+
+    tst = np.sum(acc_per_sample, axis=0) / len(data)
+    plt.plot(tst)
+    plt.ylim(0, 1)
+    plt.axhline(0.5, linewidth=1, color="black", linestyle=":")
+    plt.show()
 
     return np.mean(acc_per_trial)
 
 
 if __name__ == "__main__":
     cwd = os.getcwd()
-    root_dir = cwd + '/../../pilot-study/'
+    #root_dir = cwd + '/../../pilot-study/'
+    root_dir = 'C:/2D3D_BCI_EEG/SubjectData/'
 
-    modalities = ['ME', 'MI']
-    subject_nr = '3'
-    subject_id = 'sub-P00' + subject_nr
+    # modalities = ['ME', 'MI']
+    modalities = ['ME']
+    subject_nr = '5'
+    subject_id = 'S5'
 
-    config_file = root_dir + subject_id + '/bci-config.json'
+    #config_file = root_dir + subject_id + '/bci-config.json'
+    config_file = 'C:/2D3D_BCI_EEG/SubjectData/S5/CONFIG_S5_ses1_run1_ME_2D.json'
 
     with open(config_file) as json_file:
         config = json.load(json_file)
@@ -75,7 +78,8 @@ if __name__ == "__main__":
 
     for modality in modalities:
         print('Modality ' + modality)
-        directory = root_dir + subject_id + '/' + modality + '/data'
+        #directory = root_dir + subject_id + '/' + modality + '/data'
+        directory ='C:/2D3D_BCI_EEG/SubjectData/S5/data'
         my_files = glob.glob(directory + '/lda_*.mat')
         for f in my_files:
             data_lda = scipy.io.loadmat(f)['lda'].T

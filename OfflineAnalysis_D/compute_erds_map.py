@@ -44,7 +44,7 @@ def plot_erds(data, title, s_rate, mod, erds_mode, cl):
         ax.set_xlim(ext[0], ext[1])
         ax.set_xticklabels(xtick_l)
         # ax.axvline(n_ref, linewidth=1, color="black", linestyle=":")
-        # fig.colorbar(im, ax=ax)
+        #fig.colorbar(im, ax=ax)
         ax.set_title(subtitle)
 
     data_fill = np.zeros((n_cue,))
@@ -58,9 +58,11 @@ def plot_erds(data, title, s_rate, mod, erds_mode, cl):
         step = s_rate
         xtick_labels = np.arange(-step, int(np.shape(x)[0]), step) / s_rate
 
-    # if len(xtick_labels) > 9:
-    #     step = s_rate*2
-    #     xtick_labels = np.arange(-step, int(np.shape(x)[0]), step) / s_rate
+    """
+    if len(xtick_labels) > 9:
+        step = s_rate*2
+        xtick_labels = np.arange(-step, int(np.shape(x)[0]), step) / s_rate
+    """
 
     xtick_labels = np.array(xtick_labels, dtype=str)
     xtick_labels[-1] = xtick_labels[-1] + ' s'
@@ -83,13 +85,16 @@ def plot_erds(data, title, s_rate, mod, erds_mode, cl):
 
 if __name__ == "__main__":
     cwd = os.getcwd()
-    root_dir = cwd + '/../../pilot-study/'
+    #root_dir = cwd + '/../../pilot-study/'
+    root_dir = 'C:/2D3D_BCI_EEG/SubjectData/'
 
     modalities = ['ME', 'MI']
+    #modalities = ['ME']
     subject_nr = '1'
-    subject_id = 'sub-P00' + subject_nr
+    subject_id = 'S1'
 
-    config_file = root_dir + subject_id + '/bci-config.json'
+    # config_file = root_dir + subject_id + '/bci-config.json'
+    config_file = 'C:/2D3D_BCI_EEG/SubjectData/S1/CONFIG_S1_ses1_run1_ME_2D.json'
 
     with open(config_file) as json_file:
         config = json.load(json_file)
@@ -106,7 +111,8 @@ if __name__ == "__main__":
 
     for modality in modalities:
         print('Modality ' + modality)
-        directory = root_dir + subject_id + '/' + modality + '/data'
+        #directory = root_dir + subject_id + '/' + modality + '/data'
+        directory = 'C:/2D3D_BCI_EEG/SubjectData/S1//data'
         dir_plots = root_dir + subject_id + '/plots/erds_fb'
         my_files = glob.glob(directory + '/erds_*.mat')
 

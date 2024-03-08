@@ -83,7 +83,7 @@ class CSPAndLDA:
         self.n_channels = np.shape(self.eeg)[0]
 
     def __extract_epochs(self):
-        """Extracts epochs from the eeg data for both classes.
+        """Extracts epochs from the eeg data for both classesses.
 
         Returns
         -------
@@ -283,9 +283,9 @@ if __name__ == "__main__":
     xdf_to_mat.xdf_to_mat(config)  # convert .xdf to .mat
 
 
-    file_name = subject_id  + '_ses' + session + '_run' + run+ '_' + motor_mode + '_' + dimension
+    file_name = subject_id  + '_run' + run+ '_' + motor_mode + '_' + dimension
 
-    root_dir = cwd + '/SubjectData/' + subject_id + '/'
+    root_dir = cwd + '/SubjectData/' + subject_id + '-ses' + str(session) + '/'
     dir_out = root_dir + '/../current/'
     file_path = root_dir + file_name
 

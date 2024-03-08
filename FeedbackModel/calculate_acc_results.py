@@ -77,13 +77,13 @@ def xdf_to_mat_file(current_config_file, cwd):
     if run == '1':
         is_feedback = False
 
-    root_dir = cwd + '/SubjectData/' + subject_id
+    root_dir = cwd + '/SubjectData/' + subject_id + '-ses' + str(n_session)
     out_dir = root_dir + '/data'
     if not os.path.exists(out_dir):
         os.makedirs(out_dir)
 
-    xdf_file_name = subject_id + '_ses' + str(session) + '_run' + str(run) + '_' + motor_mode + '_' + dimension + '.xdf'
-    xdf_file_path = root_dir + '/'+ xdf_file_name
+    xdf_file_name = subject_id + '_run' + str(run) + '_' + motor_mode + '_' + dimension + '.xdf'
+    xdf_file_path = root_dir + '/' + xdf_file_name
 
     # Read XDF and save as mat
     if is_feedback:
@@ -91,13 +91,13 @@ def xdf_to_mat_file(current_config_file, cwd):
 
         erds_with_labels = add_class_labels(stream_erds, stream_marker)
         lda_with_labels = add_class_labels(stream_lda, stream_marker)
-        save_to_mat(out_dir+'/erds_ses' + session + '_run' + run + "_" + motor_mode + '.mat', 'erds', erds_with_labels)
-        save_to_mat(out_dir+'/lda_ses' + session + '_run' + run + "_" + motor_mode + '.mat', 'lda', lda_with_labels)
+        save_to_mat(out_dir+'/erds' + '_run' + run + "_" + motor_mode + '.mat', 'erds', erds_with_labels)
+        save_to_mat(out_dir+'/lda' + '_run' + run + "_" + motor_mode + '.mat', 'lda', lda_with_labels)
     else:
         stream_eeg, stream_marker = load_xdf(config, xdf_file_path, is_feedback)
 
     eeg_with_labels = add_class_labels(stream_eeg, stream_marker)
-    save_to_mat(out_dir+'/eeg_ses' + session + '_run' + run + "_" + motor_mode + '.mat', 'eeg',  eeg_with_labels)
+    save_to_mat(out_dir+'/eeg' + '_run' + run + "_" + motor_mode + '.mat', 'eeg',  eeg_with_labels)
 
 def extract_epochs(data, n_samples):
     data_labels = data[0, :]
@@ -142,11 +142,11 @@ def calculate_accuracy(current_config_file):
     if int(run) == 1:
         print("1st run only for training of classifier - no accuracy can be computed.")
     elif int(run) > 1:
-        file = root_dir + subject_id + '/data/' + 'lda_ses' + session + '_run' + run + "_" + motor_mode + '.mat'
+        file = root_dir + subject_id + '-ses' + str(n_session) + '/data/' + 'lda' + '_run' + run + "_" + motor_mode + '.mat'
         data_lda = scipy.io.loadmat(file)['lda'].T
         data_lda, labels = extract_epochs(data_lda, n_samples_task)
         accuracy = compute_accuracy(data_lda, labels)
-        print('Session ' + session + ' ' + motor_mode + ' Run ' + run + ': accuracy in %: ', accuracy * 100)
+        print(motor_mode + ' Run ' + run + ': accuracy in %: ', accuracy * 100)
 
 if __name__ == "__main__":
     cwd = os.getcwd()
@@ -156,11 +156,12 @@ if __name__ == "__main__":
         config = json.load(json_file)
 
     subject_id = config['gui-input-settings']['subject-id']
+    n_session = config['gui-input-settings']['n-session']
 
     root_dir = cwd + '/SubjectData/'
 
     # convert all .xdf files which have corresponding .json file to .mat
-    all_config_files = glob.glob(root_dir + subject_id + '/*.json')
+    all_config_files = glob.glob(root_dir + subject_id + '-ses' + str(n_session) + '/*.json')
     for current_config_file in all_config_files:
         xdf_to_mat_file(current_config_file, cwd)
 

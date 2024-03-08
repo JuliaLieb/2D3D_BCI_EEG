@@ -137,10 +137,10 @@ def analyze_eeg(eeg):
     info['bads'] = bads
     print(info)
 
-    # # Display raw data
-    # for i in range(len(indexes_class_all)):
-    #     raw = mne.io.RawArray(eeg[1:n_ch+1, indexes_class_all[i]-n_ref:indexes_class_all[i]+n_samples_trial], info)
-    #     raw.plot(show_scrollbars=True, show_scalebars=True, block=True)
+    # Display raw data
+    for i in range(len(indexes_class_all)):
+        raw = mne.io.RawArray(eeg[1:n_ch+1, indexes_class_all[i]-n_ref:indexes_class_all[i]+n_samples_trial], info)
+        raw.plot(show_scrollbars=True, show_scalebars=True, block=True)
 
     raw = mne.io.RawArray(eeg[1:n_ch + 1, :], info)
 
@@ -152,18 +152,18 @@ def analyze_eeg(eeg):
     # picks = ['C3', 'C4']
     picks = ['P3', 'P4']
 
-    # eeg = extract_eeg_epochs(eeg, n_ch)
-    # n_ep, n_ch, n_s = np.shape(eeg)
-    # events_array = np.column_stack((np.arange(0, n_ep*n_s, n_s), np.zeros(n_ep, dtype=int), np.array(class_labels, dtype=int)))
-    # eeg_epochs_array = mne.EpochsArray(eeg, info, tmin=-config['general-settings']['timing']['duration-ref'], events=events_array, event_id=event_dict)
-    # eeg_epochs_array.plot(picks=picks, show_scrollbars=False, events=events_array, event_id=event_dict, n_epochs=5)
+    eeg = extract_epochs(eeg)
+    n_ep, n_ch, n_s = np.shape(eeg)
+    events_array = np.column_stack((np.arange(0, n_ep*n_s, n_s), np.zeros(n_ep, dtype=int), np.array(class_labels, dtype=int)))
+    eeg_epochs_array = mne.EpochsArray(eeg, info, tmin=-config['general-settings']['timing']['duration-ref'], events=events_array, event_id=event_dict)
+    eeg_epochs_array.plot(picks=picks, show_scrollbars=False, events=events_array, event_id=event_dict, n_epochs=5)
 
     tmin = -duration_ref
     tmax = duration_task
     events = np.column_stack(
         (indexes_class_all, np.zeros(len(indexes_class_all), dtype=int), np.array(class_labels, dtype=int)))
     epochs = mne.Epochs(raw, events, event_dict, tmin - 0.5, tmax + 0.5, picks=picks, baseline=None, preload=True)
-    # epochs.plot(picks=picks, show_scrollbars=True, events=events, event_id=event_dict)
+    epochs.plot(picks=picks, show_scrollbars=True, events=events, event_id=event_dict)
 
     # freqs = np.arange(2, 31)  # frequencies from 2-30Hz
     freqs = np.arange(1, 30)
@@ -186,17 +186,17 @@ def analyze_eeg(eeg):
         fig, axes = plt.subplots(1, 3, figsize=(12, 4), gridspec_kw={"width_ratios": [10, 10, 0.5]}) # , 0.5
         axes = axes.flatten()
         for ch, ax in enumerate(axes[:-1]):  # for each channel  axes[:-1]
-            # # positive clusters
-            # _, c1, p1, _ = pcluster_test(tfr_ev.data[:, ch], tail=1, **kwargs)
-            # # negative clusters
-            # _, c2, p2, _ = pcluster_test(tfr_ev.data[:, ch], tail=-1, **kwargs)
-            #
-            # # note that we keep clusters with p <= 0.05 from the combined clusters
-            # # of two independent tests; in this example, we do not correct for
-            # # these two comparisons
-            # c = np.stack(c1 + c2, axis=2)  # combined clusters
-            # p = np.concatenate((p1, p2))  # combined p-values
-            # mask = c[..., p <= 0.5].any(axis=-1)  # 0.05
+            # positive clusters
+            _, c1, p1, _ = pcluster_test(tfr_ev.data[:, ch], tail=1, **kwargs)
+            # negative clusters
+            _, c2, p2, _ = pcluster_test(tfr_ev.data[:, ch], tail=-1, **kwargs)
+
+            # note that we keep clusters with p <= 0.05 from the combined clusters
+            # of two independent tests; in this example, we do not correct for
+            # these two comparisons
+            c = np.stack(c1 + c2, axis=2)  # combined clusters
+            p = np.concatenate((p1, p2))  # combined p-values
+            mask = c[..., p <= 0.5].any(axis=-1)  # 0.05
 
             # plot TFR (ERDS map with masking)
             tfr_ev.average().plot([ch], cmap="RdBu", cnorm=cnorm, axes=ax,
@@ -220,16 +220,21 @@ def analyze_eeg(eeg):
 
 if __name__ == "__main__":
     cwd = os.getcwd()
-    root_dir = cwd + '/../../pilot-study/'
+    #root_dir = cwd + '/../../pilot-study/'
+    root_dir = 'C:/2D3D_BCI_EEG/SubjectData/'
 
     modalities = ['ME', 'MI']
-    subject_id = 'sub-P001'
+    #modalities = ['ME']
+    #subject_id = 'sub-P001'
+    subject_id = 'S1'
 
-    dir_plots = root_dir + subject_id + '/plots/erds_eeg'
+    #dir_plots = root_dir + subject_id + '/plots/erds_eeg'
+    dir_plots = 'C:/2D3D_BCI_EEG/SubjectData/S1/plots/erds_eeg'
     if not os.path.exists(dir_plots):
         os.makedirs(dir_plots)
 
-    config_file = root_dir + subject_id + '/bci-config.json'
+    #config_file = root_dir + subject_id + '/bci-config.json'
+    config_file = 'C:/2D3D_BCI_EEG/SubjectData/S1/CONFIG_S1_ses1_run1_ME_2D.json'
     # if modality == 'ME' and (run == '1' or run == '2'):
     #     config_file = root_dir + subject_id + '/bci-config_run1_run2.json'
 
@@ -243,7 +248,8 @@ if __name__ == "__main__":
     n_ref = int(np.floor(sample_rate * duration_ref))
 
     for modality in modalities:
-        directory = root_dir + subject_id + '/' + modality + '/data'
+        #directory = root_dir + subject_id + '/' + modality + '/data'
+        directory = 'C:/2D3D_BCI_EEG/SubjectData/S1/data'
 
         for run in range(1, 4):
             f_name = directory + '/eeg_block'+str(run)+'.mat'
@@ -251,8 +257,8 @@ if __name__ == "__main__":
                 continue
             # LOAD MAT FILES
             data_eeg = scipy.io.loadmat(f_name)['eeg'].T
-            # data_erds = scipy.io.loadmat(directory + '/erds_block'+run+'.mat')['erds'].T
-            # data_lda = scipy.io.loadmat(directory + '/lda_block'+run+'.mat')['lda'].T
+            data_erds = scipy.io.loadmat(directory + '/erds_block'+run+'.mat')['erds'].T
+            data_lda = scipy.io.loadmat(directory + '/lda_block'+run+'.mat')['lda'].T
             #
             # EXTRACT EPOCHS
 

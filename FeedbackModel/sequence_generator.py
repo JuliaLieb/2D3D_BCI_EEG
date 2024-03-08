@@ -35,12 +35,12 @@ def sequence_generator(subject_id, tasks_per_run, n_run, n_session, motor_mode, 
     tasks = ["r", "l"]  # left and right hand
 
     # current subject
-    directory = "SubjectData\\current\\"
+    directory = "SubjectData/current/"
     file_object = open(directory + "run_" + str(n_run) + ".txt", "w")
 
     # subject backup recording
-    directory_backup = "SubjectData\\" + subject_id + "\\"
-    file_backup = open(directory_backup + "SEQ_" + subject_id + '_ses' + str(n_session) + '_run' + str(
+    directory_backup = "SubjectData/" + subject_id + '-ses' + str(n_session) + '/'
+    file_backup = open(directory_backup + "SEQ_" + subject_id + '_run' + str(
         n_run) + '_' + motor_mode + '_' + dimension_mode + ".txt", "w")
 
     # Check existence of paths and files

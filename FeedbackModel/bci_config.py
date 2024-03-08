@@ -21,13 +21,14 @@ def update_bci_config(subject_id, tasks_per_run, n_run, n_session, motor_mode, f
                       dimension_mode):
     cwd = os.getcwd()
     config_file = cwd + '/bci-config.json'
-    file_name = 'CONFIG_' + subject_id + '_ses' + str(n_session) + '_run' + str(
+    file_name = 'CONFIG_' + subject_id + '_run' + str(
         n_run) + '_' + motor_mode + '_' + dimension_mode + '.json'
-    save_path = cwd + '\\SubjectData\\' + subject_id + '\\'
+    save_path = cwd + '/SubjectData/' + subject_id + '-ses' + str(n_session) + '/'
 
     # Read BCI Configuration
     with open(config_file) as json_file:
         config = json.load(json_file)
+        config['gui-input-settings']['subject-id'] = subject_id
         config['gui-input-settings']['subject-id'] = subject_id
         config['gui-input-settings']['n-per-task'] = tasks_per_run
         config['gui-input-settings']['n-run'] = n_run
