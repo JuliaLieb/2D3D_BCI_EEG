@@ -58,11 +58,12 @@ def sequence_generator(subject_id, tasks_per_run, n_run, n_session, motor_mode, 
         print("Create new sequence")
         file_backup = open(file_path, "w")
 
-        if n_run == 1:
-            t = 10  # for classification run: always 10 runs per condition (20 in total)
-        else:
-            t = int(tasks_per_run/2)
-        sequence = create_sequence(t, tasks)
+        #if n_run == 1:
+        #    t = 10  # for classification run: always 10 runs per condition (20 in total)
+        #else:
+        #    t = int(tasks_per_run/2)
+
+        sequence = create_sequence(tasks_per_run, tasks)
 
         for trial in sequence:
             file_object.write(trial + "\n")

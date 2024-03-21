@@ -72,7 +72,7 @@ class UiUserInterface(object):
 
         print("Click input settings.")
         subject_id = 'S' + str(self.input_id.value())
-        tasks_per_run = self.input_tasks.value()
+        #tasks_per_run = self.input_tasks.value()
         n_run = self.input_run.value()
         n_session = self.input_session.value()
         if self.radio_mi.isChecked():
@@ -84,16 +84,24 @@ class UiUserInterface(object):
         else:
             fb_mode = "on"
 
-        erds_mode = "average"  # can be changed in bci-config.json, but fix for this setup #TODO
+        erds_mode = "single"  # can be changed in bci-config.json, but fix for this setup #TODO
         if self.radio_3d.isChecked():
             dimension_mode = "3D"
         else:
             dimension_mode = "2D"
 
+        if n_run == 1:
+            tasks_per_run = 10
+        elif motor_mode == "ME":
+            tasks_per_run = 10
+        else:
+            tasks_per_run = 20
+
+
         bci_config.update_bci_config(subject_id, tasks_per_run, n_run, n_session, motor_mode, fb_mode,
                                      erds_mode, dimension_mode)
 
-        tasks_per_run = int(self.input_tasks.value())
+        #tasks_per_run = int(self.input_tasks.value())
         sequence_generator.sequence_generator(subject_id, tasks_per_run, n_run, n_session, motor_mode, dimension_mode)
 
         # Update config file of LabRecorder, saves file according to input settings instead of LabRecorder internal settings
@@ -195,6 +203,7 @@ class UiUserInterface(object):
         self.label_id.setObjectName("label_ID")
 
         """Trials per task"""
+        """
         current_tasks = current_config['gui-input-settings']['n-per-task']
         self.label_task = QtWidgets.QLabel(main_window)
         self.label_task.setGeometry(QtCore.QRect(60, 250, 261, 25))
@@ -204,6 +213,7 @@ class UiUserInterface(object):
         self.input_tasks.setMinimum(1)
         self.input_tasks.setProperty("value", current_tasks)
         self.input_tasks.setObjectName("input_tasks")
+        """
 
         """Session"""
         current_session = current_config['gui-input-settings']['n-session']
@@ -358,7 +368,7 @@ class UiUserInterface(object):
         main_window.setWindowTitle(_translate("main_window", "BCI User Interface"))
         self.l_title.setText(_translate("main_window", "2D & 3D Visualization of EEG-Based BCI"))
         self.label_id.setText(_translate("main_window", "Subject ID:"))
-        self.label_task.setText(_translate("main_window", "Run 1 has 20 tasks per run.\nNumber of tasks per run (total):"))
+        #self.label_task.setText(_translate("main_window", "Run 1 has 20 tasks per run.\nNumber of tasks per run (total):"))
         self.label_session.setText(_translate("main_window", "Current session number:"))
         self.label_run.setText(_translate("main_window", "Current run number:"))
         self.radio_mi.setText(_translate("main_window", "Motor imagery"))

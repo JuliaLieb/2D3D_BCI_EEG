@@ -113,8 +113,8 @@ if __name__ == "__main__":
     dir_files = subject_directory + 'data'
     my_files = glob.glob(dir_files +'/erds_*.mat')
 
-    if not os.path.exists(dir_plots + 'plots'):
-        os.makedirs(dir_plots + 'plots')
+    if not os.path.exists(dir_plots):
+        os.makedirs(dir_plots)
 
     cnt = 0
     for f in my_files:

@@ -1,13 +1,7 @@
 r
 l
-l
 r
 l
-r
-r
-l
-l
-r
 l
 r
 r
@@ -15,6 +9,12 @@ r
 r
 l
 l
+l
 r
+l
+r
+r
+r
+l
 l
 l

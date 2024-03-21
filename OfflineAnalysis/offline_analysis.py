@@ -137,26 +137,29 @@ def analyze_eeg(eeg):
     info['bads'] = bads
     print(info)
 
-    # # Display raw data
-    # for i in range(len(indexes_class_all)):
-    #     raw = mne.io.RawArray(eeg[1:n_ch+1, indexes_class_all[i]-n_ref:indexes_class_all[i]+n_samples_trial], info)
-    #     raw.plot(show_scrollbars=True, show_scalebars=True, block=True)
-
+    """# Display raw data
+    for i in range(len(indexes_class_all)):
+        raw = mne.io.RawArray(eeg[1:n_ch+1, indexes_class_all[i]-n_ref:indexes_class_all[i]+n_samples_trial], info)
+        raw.plot(show_scrollbars=True, show_scalebars=True, block=True)
+    """
     raw = mne.io.RawArray(eeg[1:n_ch + 1, :], info)
+
 
     event_dict = dict(left=0, right=1)
     # picks = ['C3', 'Cz', 'C4']
     # picks = ['F3', 'F4', 'C3', 'C4', 'P3', 'P4']
 
     # picks = ['F3', 'F4']
-    # picks = ['C3', 'C4']
-    picks = ['P3', 'P4']
+    picks = ['C3', 'C4']
+    picked_channels = [raw.ch_names.index(ch) for ch in picks]
+    #picks = ['P3', 'P4']
 
-    # eeg = extract_eeg_epochs(eeg, n_ch)
-    # n_ep, n_ch, n_s = np.shape(eeg)
-    # events_array = np.column_stack((np.arange(0, n_ep*n_s, n_s), np.zeros(n_ep, dtype=int), np.array(class_labels, dtype=int)))
-    # eeg_epochs_array = mne.EpochsArray(eeg, info, tmin=-config['general-settings']['timing']['duration-ref'], events=events_array, event_id=event_dict)
-    # eeg_epochs_array.plot(picks=picks, show_scrollbars=False, events=events_array, event_id=event_dict, n_epochs=5)
+    """eeg = extract_epochs(eeg)
+    n_ep, n_ch, n_s = np.shape(eeg)
+    events_array = np.column_stack((np.arange(0, n_ep*n_s, n_s), np.zeros(n_ep, dtype=int), np.array(class_labels, dtype=int)))
+    eeg_epochs_array = mne.EpochsArray(eeg, info, tmin=-config['general-settings']['timing']['duration-ref'], events=events_array, event_id=event_dict)
+    eeg_epochs_array.plot(picks=picks, show_scrollbars=False, events=events_array, event_id=event_dict, n_epochs=5)
+    """
 
     tmin = -duration_ref
     tmax = duration_task
@@ -164,6 +167,9 @@ def analyze_eeg(eeg):
         (indexes_class_all, np.zeros(len(indexes_class_all), dtype=int), np.array(class_labels, dtype=int)))
     epochs = mne.Epochs(raw, events, event_dict, tmin - 0.5, tmax + 0.5, picks=picks, baseline=None, preload=True)
     # epochs.plot(picks=picks, show_scrollbars=True, events=events, event_id=event_dict)
+
+    raw_subset = mne.io.RawArray(eeg[picks], info)
+    raw_subset.plot(duration=10, events = events, event_id=event_dict)
 
     # freqs = np.arange(2, 31)  # frequencies from 2-30Hz
     freqs = np.arange(1, 30)
@@ -210,7 +216,7 @@ def analyze_eeg(eeg):
                 ax.set_yticklabels("")
 
         fig.colorbar(axes[0].images[-1], cax=axes[-1])
-        fig.suptitle(f"ERDS - {event} hand")
+        fig.suptitle(f"ERDS - {event} hand {motor_mode} run {run}")
 
         plt.savefig('{}/erds_{}_{}_{}_{}{}.png'.format(dir_plots, motor_mode, str(run), event, picks[0], picks[1]), format='png')
         plt.show()
@@ -229,6 +235,7 @@ if __name__ == "__main__":
     n_session = config['gui-input-settings']['n-session']
     n_run = config['gui-input-settings']['n-run']
     motor_mode = config['gui-input-settings']['motor-mode']
+    # motor_mode = 'ME'
     dimension = config['gui-input-settings']['dimension-mode']
 
     sample_rate = config['eeg-settings']['sample-rate']
@@ -244,7 +251,7 @@ if __name__ == "__main__":
         os.makedirs(dir_plots)
     dir_files = subject_directory + 'data'
 
-    for run in range(2, 4):
+    for run in range(2, 5):
         eeg_name = dir_files + '/eeg_run'+str(run) + '_' + motor_mode +'.mat'
         erds_name = dir_files + '/erds_run'+str(run) + '_' + motor_mode + '.mat'
         lda_name = dir_files + '/lda_run'+str(run) + '_' + motor_mode  +'.mat'
@@ -258,7 +265,7 @@ if __name__ == "__main__":
         # EXTRACT EPOCHS
 
         duration_task = duration_cue + config['general-settings']['timing']['duration-task']
-        if subject_id == 'sub-P002' and motor_mode == 'ME' and (run == 1 or run == 2):
+        if subject_id == 'S1' and motor_mode == 'ME' and (run == 1 or run == 2):
             duration_task = duration_cue + 3.75
 
         n_samples_task = int(np.floor(sample_rate * duration_task))

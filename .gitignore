@@ -6,3 +6,4 @@ VR_Game/*
 VR_Game_2D/*
 .idea/*
 bci-config.json
+OfflineAnalysis/raw_data.py
