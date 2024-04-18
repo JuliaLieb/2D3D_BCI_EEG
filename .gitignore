@@ -1,5 +1,6 @@
 # ignore measured data
 SubjectData/S*
+SubjectDataSorted/S*
 # R_Game/Library*
 # VR_Game_2D/Library*
 VR_Game/*
