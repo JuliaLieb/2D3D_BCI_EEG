@@ -8,6 +8,9 @@ import scipy.io
 import glob
 import matplotlib.pyplot as plt
 
+import xdf_to_mat_2
+import xdf_to_mat
+
 def load_xdf(config, xdf_file_path, feedback):
     streams, fileheader = pyxdf.load_xdf(xdf_file_path)
     streams_info = []
@@ -171,8 +174,9 @@ if __name__ == "__main__":
     all_config_files = glob.glob(root_dir + subject_id + '-ses' + str(n_session) + '/*.json')
     for current_config_file in all_config_files:
         xdf_to_mat_file(current_config_file, cwd)
+        #xdf_to_mat_2.xdf_to_mat(current_config_file)
 
-    # for all available .json files: calculate accuracy
+        # for all available .json files: calculate accuracy
     for current_config_file in all_config_files:
         calculate_accuracy(current_config_file)
 

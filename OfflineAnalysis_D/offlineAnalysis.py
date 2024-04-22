@@ -226,15 +226,15 @@ if __name__ == "__main__":
     modalities = ['ME', 'MI']
     #modalities = ['ME']
     #subject_id = 'sub-P001'
-    subject_id = 'S1'
+    subject_id = 'S7'
 
     #dir_plots = root_dir + subject_id + '/plots/erds_eeg'
-    dir_plots = 'C:/2D3D_BCI_EEG/SubjectData/S1/plots/erds_eeg'
+    dir_plots = 'C:/2D3D_BCI_EEG/SubjectData/S7-ses1/plots/erds_eeg'
     if not os.path.exists(dir_plots):
         os.makedirs(dir_plots)
 
-    #config_file = root_dir + subject_id + '/bci-config.json'
-    config_file = 'C:/2D3D_BCI_EEG/SubjectData/S1/CONFIG_S1_ses1_run1_ME_2D.json'
+    #onfig_file = root_dir + subject_id + '/bci-config.json'
+    config_file = 'C:\\2D3D_BCI_EEG\\SubjectData\\S7-ses1\\CONFIG_S7_run1_MI_2D.json'
     # if modality == 'ME' and (run == '1' or run == '2'):
     #     config_file = root_dir + subject_id + '/bci-config_run1_run2.json'
 

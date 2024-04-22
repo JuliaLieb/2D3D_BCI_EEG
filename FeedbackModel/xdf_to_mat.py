@@ -152,3 +152,39 @@ def xdf_to_mat(config):
 
         save_to_mat(mat_file_path, 'data', eeg_and_label)
         print('.mat created')
+
+
+def xdf_to_mat_new(config, path):
+
+    # ------------- Subject specific variables -------------
+    motor_mode = config['gui-input-settings']['motor-mode']
+    dimension = config['gui-input-settings']['dimension-mode']
+    subject_id = config['gui-input-settings']['subject-id']
+    session = str(config['gui-input-settings']['n-session'])
+    run = str(config['gui-input-settings']['n-run'])
+    # ------------------------------------------------------
+
+    file_name = subject_id + '_run' + run + '_' + motor_mode + '_' + dimension
+    xdf_file_path = path + subject_id + '-ses' + session + '/' + file_name + '.xdf'
+    mat_file_path = path + subject_id + '-ses' + session + '/' + file_name + '.mat'
+
+    if os.path.exists(mat_file_path):
+        print(mat_file_path + " already exists.")
+
+    else:
+        if not os.path.exists(xdf_file_path):
+            print(xdf_file_path + " does not exist.")
+            os.makedirs(path + subject_id + '-ses' + session + '/')
+
+        try:
+            # Extract the eeg and marker lsl stream from the xdf file
+            stream_eeg, stream_marker = load_xdf(xdf_file_path, config['general-settings']['lsl-streams'])
+
+             # Add a row to the eeg data for the class labels
+            eeg_and_label = add_class_labels(stream_eeg, stream_marker)
+
+            save_to_mat(mat_file_path, 'data', eeg_and_label)
+            print(mat_file_path + ' created.')
+        except:
+            # Sometimes .xdf file has an invalid footer and cannot be handled the same way as other .xdf files
+            print('ERROR: Could not save ' + mat_file_path)

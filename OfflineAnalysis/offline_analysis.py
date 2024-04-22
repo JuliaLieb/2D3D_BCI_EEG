@@ -10,6 +10,9 @@ from mne.time_frequency import tfr_multitaper
 from mne.stats import permutation_cluster_1samp_test as pcluster_test
 import os
 import scipy.io
+import glob
+from PyQt5.QtWidgets import QApplication
+import sys
 
 
 def extract_epochs(data):
@@ -123,6 +126,11 @@ def compute_accuracy(data, median=False):
 
     return samples_accurate / samples_total
 
+#def plot_eeg(eeg, n_ch, info):
+#    for i in range(len(indexes_class_all)):
+#        raw = mne.io.RawArray(eeg[1:n_ch+1, indexes_class_all[i]-n_ref:indexes_class_all[i]+n_samples_trial], info)
+#        raw.plot()
+
 
 def analyze_eeg(eeg):
     ch_names = []
@@ -137,11 +145,14 @@ def analyze_eeg(eeg):
     info['bads'] = bads
     print(info)
 
-    """# Display raw data
-    for i in range(len(indexes_class_all)):
-        raw = mne.io.RawArray(eeg[1:n_ch+1, indexes_class_all[i]-n_ref:indexes_class_all[i]+n_samples_trial], info)
-        raw.plot(show_scrollbars=True, show_scalebars=True, block=True)
-    """
+    eeg_scaled = eeg * 20e-3
+    #plot_eeg(eeg_scaled, n_ch, info) # Display raw data
+
+    '''for i in range(len(indexes_class_all)):
+        raw = mne.io.RawArray(eeg_scaled[1:n_ch+1, indexes_class_all[i]-n_ref:indexes_class_all[i]+n_samples_trial], info)
+        raw.plot(duration=11.25, events = 1)
+        '''
+
     raw = mne.io.RawArray(eeg[1:n_ch + 1, :], info)
 
 
@@ -168,9 +179,6 @@ def analyze_eeg(eeg):
     epochs = mne.Epochs(raw, events, event_dict, tmin - 0.5, tmax + 0.5, picks=picks, baseline=None, preload=True)
     # epochs.plot(picks=picks, show_scrollbars=True, events=events, event_id=event_dict)
 
-    raw_subset = mne.io.RawArray(eeg[picks], info)
-    raw_subset.plot(duration=10, events = events, event_id=event_dict)
-
     # freqs = np.arange(2, 31)  # frequencies from 2-30Hz
     freqs = np.arange(1, 30)
     vmin, vmax = -1, 1  # set min and max ERDS values in plot
@@ -186,6 +194,13 @@ def analyze_eeg(eeg):
                                         mode="percent")  # subtracting the mean of baseline values followed by dividing by the mean of baseline values (‘percent’)
     tfr.crop(0, tmax)
 
+
+
+    for i in range(len(indexes_class_all)):
+        raw = mne.io.RawArray(eeg_scaled[1:n_ch+1, indexes_class_all[i]-n_ref:indexes_class_all[i]+n_samples_trial], info)
+        raw.plot(duration=2, n_channels=n_ch, show_scrollbars=True, block=True)
+
+    '''
     for event in event_dict:
         # select desired epochs for visualization
         tfr_ev = tfr[event]
@@ -220,13 +235,14 @@ def analyze_eeg(eeg):
 
         plt.savefig('{}/erds_{}_{}_{}_{}{}.png'.format(dir_plots, motor_mode, str(run), event, picks[0], picks[1]), format='png')
         plt.show()
-
+    '''
     return eeg
 
 
 if __name__ == "__main__":
     cwd = os.getcwd()
 
+    #Define Subject and Session from GUI
     config_file = cwd + '/../bci-config.json'
     with open(config_file) as json_file:
         config = json.load(json_file)
@@ -241,43 +257,51 @@ if __name__ == "__main__":
     sample_rate = config['eeg-settings']['sample-rate']
     duration_ref = config['general-settings']['timing']['duration-ref']
     duration_cue = config['general-settings']['timing']['duration-cue']
-
     n_ref = int(np.floor(sample_rate * duration_ref))
 
-
     subject_directory = cwd + '/../SubjectData/' + subject_id + '-ses' + str(n_session) + '/'
-    dir_plots = subject_directory + 'plots'
+
+
+    #all_config_files = glob.glob(subject_directory + '*.json')
+    #for current_config_file in all_config_files:
+    #    break
+
+
+    dir_plots = subject_directory + '/plots'
     if not os.path.exists(dir_plots):
         os.makedirs(dir_plots)
-    dir_files = subject_directory + 'data'
+    dir_files = subject_directory + '/data'
 
-    for run in range(2, 5):
-        eeg_name = dir_files + '/eeg_run'+str(run) + '_' + motor_mode +'.mat'
-        erds_name = dir_files + '/erds_run'+str(run) + '_' + motor_mode + '.mat'
-        lda_name = dir_files + '/lda_run'+str(run) + '_' + motor_mode  +'.mat'
-        if not os.path.exists(eeg_name):
-            continue
-        # LOAD MAT FILES
-        data_eeg = scipy.io.loadmat(eeg_name)['eeg'].T
-        data_erds = scipy.io.loadmat(erds_name)['erds'].T
-        data_lda = scipy.io.loadmat(lda_name)['lda'].T
-        #
-        # EXTRACT EPOCHS
+    #for run in range(2, 5):
+    eeg_name = dir_files + '/eeg_run'+str(n_run) + '_' + motor_mode +'.mat'
+    erds_name = dir_files + '/erds_run'+str(n_run) + '_' + motor_mode + '.mat'
+    lda_name = dir_files + '/lda_run'+str(n_run) + '_' + motor_mode  +'.mat'
+    #if not os.path.exists(eeg_name):
+    #    continue
+    # LOAD MAT FILES
+    data_eeg = scipy.io.loadmat(eeg_name)['eeg'].T
+    data_erds = scipy.io.loadmat(erds_name)['erds'].T
+    data_lda = scipy.io.loadmat(lda_name)['lda'].T
+    #
+    # EXTRACT EPOCHS
 
-        duration_task = duration_cue + config['general-settings']['timing']['duration-task']
-        if subject_id == 'S1' and motor_mode == 'ME' and (run == 1 or run == 2):
-            duration_task = duration_cue + 3.75
+    duration_task = duration_cue + config['general-settings']['timing']['duration-task']
+    #if subject_id == 'S1' and motor_mode == 'ME' and (run == 1 or run == 2):
+    #    duration_task = duration_cue + 3.75
 
-        n_samples_task = int(np.floor(sample_rate * duration_task))
-        n_samples_trial = n_ref + n_samples_task
+    n_samples_task = int(np.floor(sample_rate * duration_task))
+    n_samples_trial = n_ref + n_samples_task
 
-        indexes_class_1 = np.where(data_eeg[0, :] == 121)[0]
-        indexes_class_2 = np.where(data_eeg[0, :] == 122)[0]
-        indexes_class_all = np.sort(np.append(indexes_class_1, indexes_class_2), axis=0)
+    indexes_class_1 = np.where(data_eeg[0, :] == 121)[0]
+    indexes_class_2 = np.where(data_eeg[0, :] == 122)[0]
+    indexes_class_all = np.sort(np.append(indexes_class_1, indexes_class_2), axis=0)
 
-        n_trials = len(indexes_class_all)
-        class_labels = data_eeg[0, indexes_class_all] - 121
+    n_trials = len(indexes_class_all)
+    class_labels = data_eeg[0, indexes_class_all] - 121
 
-        # COMPUTE ERDS MAP FROM EEG SIGNAL
-        data_eeg = analyze_eeg(data_eeg)
+    app = QApplication(sys.argv)
+
+    # COMPUTE ERDS MAP FROM EEG SIGNAL
+    print('Subject: ' + subject_id + ' Session: ' + str(n_session) + ' Run: ' + str(n_run))
+    data_eeg = analyze_eeg(data_eeg)
 

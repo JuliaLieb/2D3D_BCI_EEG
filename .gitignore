@@ -8,3 +8,4 @@ VR_Game_2D/*
 .idea/*
 bci-config.json
 OfflineAnalysis/raw_data.py
+OfflineAnalysis/MNE-misc-data/*
