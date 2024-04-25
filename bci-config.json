@@ -67,7 +67,7 @@
         }
     },
     "gui-input-settings": {
-        "subject-id": "S7",
+        "subject-id": "S16",
         "total-runs": 4,
         "n-per-task": 10,
         "n-run": 1,
